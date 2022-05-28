@@ -1,17 +1,17 @@
 name = "SOOS"
-# Method 1
-reverse_name = list(reversed(name))
-name_list=[]
-for i in name:
-    name_list.append(i)
-if name_list == reverse_name:
+#Method 1
+reverse_name = name[::-1]
+if name == reverse_name:
     print("Palindrome")
 else:
     print("Not Palindrome")
 
-#Method 2
-# reverse_name = name[::-1]
-# if name == reverse_name:
+#Method  2
+# name = "SOOS"
+
+# reverse_name = list(reversed(name))
+# currentName = list(name)
+# if currentName == reverse_name:
 #     print("Palindrome")
 # else:
 #     print("Not Palindrome")
@@ -40,3 +40,13 @@ else:
 # else:
 #     print("Not Palindrome") 
 
+# name = "SOOS"
+# # Method 6
+# reverse_name = list(reversed(name))
+# name_list=[]
+# for i in name:
+#     name_list.append(i)
+# if name_list == reverse_name:
+#     print("Palindrome")
+# else:
+#     print("Not Palindrome")
