@@ -1,4 +1,4 @@
-def findElement(nums: list)->list:
+def findElement(nums):
     l = len(nums)
     if l<=1:
         return 0
@@ -15,7 +15,7 @@ def findElement(nums: list)->list:
                 lmin = nums[i]
                 return lmin
 
-arr=[10,8,7,-1,6,9]
+# arr=[10,8,7,-1,6,9]
 # arr= [-4,-6,3,1,4]
-# arr=  [1,2,3,4,5,6,8]
+arr=  [1,2,3,4,5,6,8]
 print(findElement(arr))

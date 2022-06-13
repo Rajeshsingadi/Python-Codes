@@ -9,7 +9,7 @@ for i in range(n):
 for i in range(n):
     if bolts[i] in hashkey:
         nuts[i] = bolts[i]
-
+# print(nuts,bolts)
 for i in range(n):
     print(nuts[i], end=' ')
 print()

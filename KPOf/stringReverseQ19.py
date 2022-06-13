@@ -1,5 +1,9 @@
 s = "nirmal"
 
+#Method 0
+#Slicing
+# print(s[::-1])
+
 #Method 1
 rs=''
 for i in s:
