@@ -6,7 +6,8 @@ def ip_addr(arr):
     d = dict()
     maxipList= []
     for i in arr:
-        indexVal = i.index(" ")
+        # indexVal = i.index(" ")
+        indexVal=i.find(" ")
         ipAddr = i[:indexVal]
         if ipAddr in d:
             d[ipAddr] += 1

@@ -28,7 +28,7 @@ def lengthOfCycle(arr, startIndex):
     return count
 
 # print(lengthOfCycle([1, 0], 0) == 2)
-# print(lengthOfCycle([1, 2, 0], 0) == 3)
+print(lengthOfCycle([1, 2, 0], 0) == 3)
 # print(lengthOfCycle([1, 2, 3, 4, 5, 3], 0) == 3)
 # print(lengthOfCycle([1, 2, 0], 0) == 3)
 # print(lengthOfCycle([1, 2, 3, 1], 0) == 3)
@@ -37,7 +37,7 @@ def lengthOfCycle(arr, startIndex):
 # print(lengthOfCycle([1, 2, 3, 4], 4) == -1)
 # print(lengthOfCycle([2, 3, 4, 0], 0) == -1)
 # print(lengthOfCycle([2, 3, 0], 0) == 2)
-print(lengthOfCycle([3,0,1, 2, 1, 1], 0) )
+# print(lengthOfCycle([3,0,1, 2, 1, 1], 0) )
 
 '''
 theory behind it 

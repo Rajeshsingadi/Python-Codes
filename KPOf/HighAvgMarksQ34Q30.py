@@ -21,13 +21,12 @@ def maxAvgScore(scores):
             grades[name] = [0,0]
         grades[name][0] += float(score)
         grades[name][1] += 1
-    print(grades)
+    # print(grades)
     
     for val in grades.values():
         maxAvg = max(maxAvg, val[0]//val[1])
     
     return maxAvg
-
 
 # scores = [("Bob","87"), ("Mike", "35"),("Bob", "52"), ("Jason","35"), ("Mike", "55"), ("Jessica", "99")]
 scores = [["Bob","100"], ["Charles", "30"],["Bob", "20"], ["Marie", "80"]]

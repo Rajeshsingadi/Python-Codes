@@ -1,7 +1,7 @@
 # Method 1
 def isPowerofTen(num):
     if num == 10:
-        return 1
+        return True
     pow = 1
     while pow<num:
         pow = pow*10

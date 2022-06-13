@@ -3,12 +3,14 @@
 
 #Time Complexity is O(N)
 def secondSmallest(l):
+    l.sort()
     first = l[0]
     while first in l:
             l.remove(first)
-    # print(l[0])
     return l[0]
+l=[4,8, 9, 2, 1, 2, 1, 1,9]
 
+print(secondSmallest(l))
 
 #Time Complexity is O(N)
 # def secondSmallest(l):
@@ -24,6 +26,6 @@ def secondSmallest(l):
 #     return second
 
 
-l=[4,8, 9, 2, 1, 2, 1, 1]
-l.sort()
-print(secondSmallest(l))
+# l=[4,8, 9, 2, 1, 2, 1, 1]
+# l.sort()
+# print(secondSmallest(l))

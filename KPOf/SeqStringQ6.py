@@ -1,16 +1,18 @@
 
 #Method 1 with lists
 s="abcde"
-step = 3
-length = len(s)
-res = [s[i:i+step] for i in range(len(s))]
-newRes = []
-for i in res:
-    if len(i)!=step:
-        res.remove(i)
-    else:
-        newRes.append(i)
-print(newRes)
+step=3
+def generateSeq(s, step):
+    length = len(s)
+    res = [s[i:i+step] for i in range(len(s))]
+    newRes = []
+    for i in res:
+        if len(i)!=step:
+            res.remove(i)
+        else:
+            newRes.append(i)
+    return(newRes)
+print(generateSeq(s,step))
 
 #Method 2 with sets
 

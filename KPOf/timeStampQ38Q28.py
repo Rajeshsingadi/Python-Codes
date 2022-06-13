@@ -1,9 +1,8 @@
 #Q28
 
-from typing import List
 from itertools import permutations
 
-def extractTime(nums: List[int]) ->str:
+def extractTime(nums):
     n = len(nums)
     if n>4:
         return 0

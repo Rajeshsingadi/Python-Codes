@@ -17,5 +17,6 @@ def minSteps(s):
         return res
     return dp(s, "", "")
 
-s="ABCABCE"
+# s="ABCABCE"
+s="ABCDABCE"
 print(minSteps(s))

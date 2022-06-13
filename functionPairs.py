@@ -6,7 +6,7 @@ count=0
 j=len(st)-1
 for i in range(len(st)):
     if(st[i]!=st[j]):
-        a=abs(st[i]-st[i+1])        
+        a=abs(st[i]-st[i+1])     
         if(a==dif):
             count+=1
 print(count)
