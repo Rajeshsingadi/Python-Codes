@@ -1,4 +1,5 @@
-def arrayRotation(arr, n, rotate):
+def arrayRotation(arr,rotate):
+    n=len(arr)
     first_arr = []
     second_arr = []
     check = 0
@@ -20,5 +21,5 @@ def arrayRotation(arr, n, rotate):
 
 arr= [1,2,3,4]
 rotate = 10
-res =arrayRotation(arr, len(arr), rotate)
+res =arrayRotation(arr, rotate)
 print(res)
