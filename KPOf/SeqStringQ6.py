@@ -3,7 +3,6 @@
 s="abcde"
 step=3
 def generateSeq(s, step):
-    length = len(s)
     res = [s[i:i+step] for i in range(len(s))]
     newRes = []
     for i in res:

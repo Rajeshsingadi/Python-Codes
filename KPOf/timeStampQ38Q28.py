@@ -12,7 +12,8 @@ def extractTime(nums):
                 return "%d%d:%d%d" % i
         return -1
 
-nums = [1,2,3,4]
+# nums = [1,2,3,4]
+nums = [2,6,1,3]
 print(extractTime(nums))
 
 
