@@ -20,6 +20,8 @@
 def classPresident(arr, k):
     k = k-1
     indx = k
+    if indx > len(arr):
+        indx = len(arr)- indx
     while len(arr) > 1:
         arr.pop(indx)
         indx = (indx + k) % len(arr)
