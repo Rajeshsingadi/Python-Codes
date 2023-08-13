@@ -32,7 +32,6 @@ print(second_smallest_function(l))
 #         second=l[i]
 # print(second)
 
-
 #Method 2 brute force O(N^2)
 # arr = [3,7,12,1,2]
 # for i in range(len(arr)):
