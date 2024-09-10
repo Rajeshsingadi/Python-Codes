@@ -2,10 +2,10 @@ Google Cloud Platform (GCP) and Big Data Services
 -------------------------------------------------
 
 1)[What are some key differences between BigQuery and traditional relational databases?](#question-1)
-2)[How would you design a data pipeline using Google Cloud Dataflow?](#question-2)
-3)Can you explain how Pub/Sub works and its role in real-time data processing pipelines?
-4)What strategies do you use to optimize BigQuery queries for performance?
-5)Describe the process of setting up an ETL workflow on GCP. What services would you use and why?
+[2)How would you design a data pipeline using Google Cloud Dataflow?](#question-2)
+[3)Can you explain how Pub/Sub works and its role in real-time data processing pipelines?](#question-3)
+[4)What strategies do you use to optimize BigQuery queries for performance?](#question-4)
+[5)Describe the process of setting up an ETL workflow on GCP. What services would you use and why?](#question-5)
 
 ## Question 1
 1) What are some key differences between BigQuery and traditional relational databases?
@@ -35,6 +35,7 @@ Write Outputs: Store the processed data in BigQuery (for analytics), Cloud Stora
 Orchestration: Use Cloud Composer (Airflow) to schedule and monitor the pipeline.
 Monitoring: Implement logging and monitoring using Stackdriver for performance and error handling.
 
+## Question 3
 3)Can you explain how Pub/Sub works and its role in real-time data processing pipelines?
 A)
 Google Cloud Pub/Sub is a messaging service that enables asynchronous communication between independent applications. Here's how it works:
@@ -51,6 +52,7 @@ Decoupling: Publishers and subscribers operate independently, ensuring flexibili
 Streaming Data: Pub/Sub feeds data into stream processing systems (like Cloud Dataflow) for real-time analysis, transformation, and storage.
 It’s essential for enabling real-time, scalable data pipelines.
 
+## Question 4
 4)What strategies do you use to optimize BigQuery queries for performance?
 A)
 Here are key strategies to optimize **BigQuery** queries for real-time performance, with examples:
@@ -120,6 +122,7 @@ Here are key strategies to optimize **BigQuery** queries for real-time performan
 
 These strategies help minimize data scanning, reduce processing time, and optimize overall performance in real-time.
 
+## Question 5
 5) Describe the process of setting up an ETL workflow on GCP. What services would you use and why?
 A)
 To set up an ETL (Extract, Transform, Load) workflow on Google Cloud Platform (GCP), here's the process and the services you'd use:
