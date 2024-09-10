@@ -1,15 +1,15 @@
 Google Cloud Platform (GCP) and Big Data Services
 -------------------------------------------------
 
-1)[What are some key differences between BigQuery and traditional relational databases?](#question-1)
-[2)How would you design a data pipeline using Google Cloud Dataflow?](#question-2)
-[3)Can you explain how Pub/Sub works and its role in real-time data processing pipelines?](#question-3)
-[4)What strategies do you use to optimize BigQuery queries for performance?](#question-4)
-[5)Describe the process of setting up an ETL workflow on GCP. What services would you use and why?](#question-5)
+[1)What are some key differences between BigQuery and traditional relational databases?](#question-1)  
+[2)How would you design a data pipeline using Google Cloud Dataflow?](#question-2)  
+[3)Can you explain how Pub/Sub works and its role in real-time data processing pipelines?](#question-3)  
+[4)What strategies do you use to optimize BigQuery queries for performance?](#question-4)  
+[5)Describe the process of setting up an ETL workflow on GCP. What services would you use and why?](#question-5)  
 
-## Question 1
-1) What are some key differences between BigQuery and traditional relational databases?
-A) 
+## Question 1  
+1) What are some key differences between BigQuery and traditional relational databases?  
+A)
 Architecture:
 BigQuery: Serverless, distributed data warehouse for analytics.
 Relational DB: Requires manual setup and management of servers.
@@ -25,18 +25,18 @@ Relational DB: Better suited for transactional workloads, may struggle with big 
 Storage and Costs:
 BigQuery: Charges based on storage and query size.
 Relational DB: Costs depend on storage and resources managed manually.
-
+  
 ## Question 2
-2) How would you design a data pipeline using Google Cloud Dataflow?
+2) How would you design a data pipeline using Google Cloud Dataflow?  
 A)
-Ingest Data: Use Pub/Sub for streaming data or Cloud Storage/BigQuery for batch data.
+Ingest Data: Use Pub/Sub for streaming data or Cloud Storage/BigQuery for batch data.  
 Data Processing: Apply transformations, aggregations, and filtering using Apache Beam in Dataflow. This includes windowing for streaming data.
-Write Outputs: Store the processed data in BigQuery (for analytics), Cloud Storage (for raw/processed data), or Pub/Sub (for real-time use cases).
-Orchestration: Use Cloud Composer (Airflow) to schedule and monitor the pipeline.
-Monitoring: Implement logging and monitoring using Stackdriver for performance and error handling.
+Write Outputs: Store the processed data in BigQuery (for analytics), Cloud Storage (for raw/processed data), or Pub/Sub (for real-time use cases).  
+Orchestration: Use Cloud Composer (Airflow) to schedule and monitor the pipeline.  
+Monitoring: Implement logging and monitoring using Stackdriver for performance and error handling.  
 
 ## Question 3
-3)Can you explain how Pub/Sub works and its role in real-time data processing pipelines?
+3)Can you explain how Pub/Sub works and its role in real-time data processing pipelines?  
 A)
 Google Cloud Pub/Sub is a messaging service that enables asynchronous communication between independent applications. Here's how it works:
 
@@ -53,7 +53,7 @@ Streaming Data: Pub/Sub feeds data into stream processing systems (like Cloud Da
 It’s essential for enabling real-time, scalable data pipelines.
 
 ## Question 4
-4)What strategies do you use to optimize BigQuery queries for performance?
+4)What strategies do you use to optimize BigQuery queries for performance?  
 A)
 Here are key strategies to optimize **BigQuery** queries for real-time performance, with examples:
 
@@ -123,7 +123,7 @@ Here are key strategies to optimize **BigQuery** queries for real-time performan
 These strategies help minimize data scanning, reduce processing time, and optimize overall performance in real-time.
 
 ## Question 5
-5) Describe the process of setting up an ETL workflow on GCP. What services would you use and why?
+5) Describe the process of setting up an ETL workflow on GCP. What services would you use and why?  
 A)
 To set up an ETL (Extract, Transform, Load) workflow on Google Cloud Platform (GCP), here's the process and the services you'd use:
 
