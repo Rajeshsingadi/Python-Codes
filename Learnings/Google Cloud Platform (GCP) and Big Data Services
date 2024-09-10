@@ -1,13 +1,13 @@
 Google Cloud Platform (GCP) and Big Data Services
 -------------------------------------------------
 
-1)What are some key differences between BigQuery and traditional relational databases?
-2)How would you design a data pipeline using Google Cloud Dataflow?
+1)[What are some key differences between BigQuery and traditional relational databases?](#question-1)
+2)[How would you design a data pipeline using Google Cloud Dataflow?](#question-2)
 3)Can you explain how Pub/Sub works and its role in real-time data processing pipelines?
 4)What strategies do you use to optimize BigQuery queries for performance?
 5)Describe the process of setting up an ETL workflow on GCP. What services would you use and why?
 
-
+## Question 1
 1) What are some key differences between BigQuery and traditional relational databases?
 A) 
 Architecture:
@@ -26,6 +26,7 @@ Storage and Costs:
 BigQuery: Charges based on storage and query size.
 Relational DB: Costs depend on storage and resources managed manually.
 
+## Question 2
 2) How would you design a data pipeline using Google Cloud Dataflow?
 A)
 Ingest Data: Use Pub/Sub for streaming data or Cloud Storage/BigQuery for batch data.
@@ -159,6 +160,26 @@ To set up an ETL (Extract, Transform, Load) workflow on Google Cloud Platform (G
    **Why**: Provides real-time visibility into ETL workflow health and performance.
 
 This setup ensures efficient data processing, scalability, and easy maintenance across batch and real-time data pipelines.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
