@@ -916,10 +916,12 @@ These practices help in tuning PySpark jobs for better performance and resource 
 
 
 ## Question 29  
-what is Schema evolution in Py Spark?  
+what is Schema evolution in Py Spark? How would you handle schema evolution in data pipelines?  
 A)  
 **Schema evolution** in PySpark allows automatic handling of changes in data schema, such as adding or modifying columns. This feature enables seamless processing of data sources with evolving schemas without requiring manual adjustments. For example, setting `mergeSchema` to `true` when reading Parquet files lets PySpark automatically accommodate schema changes.
 
+
+A: In Spark, schema evolution can be handled using tools like Delta Lake or Apache Hudi, which allow for changes in schema without breaking existing pipelines. Additionally, we can use a flexible schema definition with optional fields or handle schema evolution using a metadata registry like Apache Hive.
 
 ## Question 30  
 What is Databricks Secret?  
