@@ -5,7 +5,7 @@ PySpark Interview Questions for Experienced Professionals
 [1)How is Apache Spark different from MapReduce?](#question-1)  
 [2)explain spark architecture?](#question-2)  
 [3)Under what scenarios are Client and Cluster modes used for deployment?](#question-3)
-[4)explain spark architecture?](#question-4)
+[4)What is meant by Executor Memory in PySpark?](#question-4)
 [5)explain spark architecture?](#question-5)
 [6)explain spark architecture?](#question-6)
 [7)explain spark architecture?](#question-7)
@@ -72,6 +72,15 @@ A)
 - **Use Case**: Ideal for production and large-scale batch jobs where the job needs to be robust to client disconnections.
 
 ## Question 4  
+What is meant by Executor Memory in PySpark?  
+A)  
+**Executor Memory** in PySpark is the memory allocated to each executor in the cluster to run tasks and store data for shuffles and caching. It is crucial for performance and avoiding memory-related issues.
+
+- **Divided into**: Execution Memory (tasks), Storage Memory (caching), and Overhead.
+- **Set by**: `--executor-memory` (e.g., `--executor-memory 4G`).
+- **Tuning**: Key for performance. Too little causes garbage collection, too much wastes resources.
+
+This ensures optimal memory use for Spark jobs.
 
 ## Question 5  
 
