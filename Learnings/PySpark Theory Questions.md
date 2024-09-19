@@ -4,15 +4,14 @@ PySpark Interview Questions for Experienced Professionals
 
 [1)How is Apache Spark different from MapReduce?](#question-1)  
 [2)explain spark architecture?](#question-2)  
-[2)Under what scenarios are Client and Cluster modes used for deployment?](#question-3)
-[2)explain spark architecture?](#question-4)
-[2)explain spark architecture?](#question-5)
-[2)explain spark architecture?](#question-6)
-[2)explain spark architecture?](#question-7)
-[2)explain spark architecture?](#question-8)
-[2)explain spark architecture?](#question-9)
-[2)explain spark architecture?](#question-10)
-
+[3)Under what scenarios are Client and Cluster modes used for deployment?](#question-3)
+[4)explain spark architecture?](#question-4)
+[5)explain spark architecture?](#question-5)
+[6)explain spark architecture?](#question-6)
+[7)explain spark architecture?](#question-7)
+[8)explain spark architecture?](#question-8)
+[9)explain spark architecture?](#question-9)
+[10)explain spark architecture?](#question-10)
 
 
 
