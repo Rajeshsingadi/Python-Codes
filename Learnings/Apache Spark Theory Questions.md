@@ -7,7 +7,7 @@
 [6)Explain what RDD is?](#question-6)  
 [7)What does DAG refer to in Apache Spark?](#question-7)  
 [8)List the types of Deploy Modes in Spark?](#question-8)  
-[9)What is meant by Executor Memory in PySpark?](#question-9)
+[9)What is meant by Executor Memory in PySpark?](#question-9)  
 [7)Sample question here?](#question-7)  
 [8)Sample question here?](#question-8)  
 [9)Sample question here?](#question-9)  
@@ -54,7 +54,7 @@ A)
 
 
 ## Question 3  
-3)  Under what scenarios are Client and Cluster modes used for deployment?
+3)  Under what scenarios are Client and Cluster modes used for deployment?  
 A)  
 ### **Client Mode vs. Cluster Mode**
 
