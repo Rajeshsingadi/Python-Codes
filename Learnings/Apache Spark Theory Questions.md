@@ -1,14 +1,22 @@
 
 [1)What is Apache Spark?](#question-1)  
-[2)How is Apache Spark different from MapReduce?](#question-2)  
-[3)What are the Key Features of the Spark Ecosystem?](#question-3)  
-[4)Explain what RDD is?](#question-4)  
-[5)What does DAG refer to in Apache Spark?](#question-5)  
-[6)List the types of Deploy Modes in Spark?](#question-6)  
+[2)explain spark architecture?](#question-2)  
+[3)Under what scenarios are Client and Cluster modes used for deployment?](#question-3) 
+[4)How is Apache Spark different from MapReduce?](#question-4)  
+[5)What are the Key Features of the Spark Ecosystem?](#question-5)  
+[6)Explain what RDD is?](#question-6)  
+[7)What does DAG refer to in Apache Spark?](#question-7)  
+[8)List the types of Deploy Modes in Spark?](#question-8)  
+[9)What is meant by Executor Memory in PySpark?](#question-9)
 [7)Sample question here?](#question-7)  
 [8)Sample question here?](#question-8)  
 [9)Sample question here?](#question-9)  
 [10)Sample question here?](#question-10)  
+[11)Sample question here?](#question-11)  
+[12)Sample question here?](#question-12)  
+[13)Sample question here?](#question-13)  
+[14)Sample question here?](#question-14)  
+[15)Sample question here?](#question-15)  
 
 
 
@@ -20,9 +28,53 @@ Apache Spark is an open-source, distributed computing system designed for big da
 1. **Fast**: Spark is known for its speed, as it processes data in-memory.
 2. **Distributed**: It can handle large datasets by distributing them across multiple machines.
 3. **Versatile**: Supports various tasks like batch processing, real-time streaming, machine learning, and graph processing.
-4. **Easy to Use**: Offers APIs in Python, Scala, Java, and R, making it accessible to a wide range of developers.
+4. **Easy to Use**: Offers APIs in Python, Scala, Java, and R, making it accessible to a wide range of developers.  
 
-## Question 2 
+
+## Question 2  
+2) explain spark architecture?  
+A)  
+### **Spark Architecture (High-level)**
+
+- **Driver Program**: The main program that controls the execution of jobs. It translates the application into tasks that will be distributed across worker nodes.
+  
+- **Cluster Manager**: Manages the resources in the cluster (e.g., YARN, Mesos, or Spark’s standalone cluster manager). It allocates resources for Spark applications.
+
+- **Worker Nodes (Executors)**: 
+  - **Executors**: These run on worker nodes and execute the tasks assigned to them. They also store data in memory or disk for operations that require shuffling and caching.
+  
+- **Job Execution Flow**:
+  1. **Job Submission**: The client submits a job to the **Cluster Manager**.
+  2. **Driver Program**: The driver program transforms the job into a Directed Acyclic Graph (DAG) of stages.
+  3. **Task Distribution**: The Cluster Manager allocates resources, and the driver assigns tasks to executors on worker nodes.
+  4. **Task Execution**: Executors process the tasks and return the results to the driver program.
+
+- **Task Fault Tolerance**: If a node fails, Spark reruns the task on another node using the information in the DAG.
+![alt text](<DALL·E 2024-09-19 08.24.10 - A high-level architecture of Apache Spark showing the interaction between the Driver Program, Cluster Manager, Worker Nodes, and Executors. The diagra.webp>)  
+
+
+## Question 3  
+3)  Under what scenarios are Client and Cluster modes used for deployment?
+A)  
+### **Client Mode vs. Cluster Mode**
+
+| **Mode**        | **When to Use**                                       | **Description**                                                                 |
+|-----------------|-------------------------------------------------------|---------------------------------------------------------------------------------|
+| **Client Mode** | For development, debugging, or small jobs. Low-latency access is needed between the driver and the cluster. | The driver runs on the same machine where the job is submitted. Useful for interactive jobs (e.g., using a notebook). |
+| **Cluster Mode**| For large production jobs or long-running jobs.         | The driver runs on the cluster, not on the client machine. Suitable for large-scale distributed processing.              |
+
+### **Client Mode Overview:**
+- **Driver Location**: The driver runs on the client machine (where the job is submitted).
+- **Communication**: The client machine must be active throughout the job, as it communicates with the cluster.
+- **Use Case**: Typically used in interactive jobs like data exploration or development where immediate feedback is needed.
+
+### **Cluster Mode Overview:**
+- **Driver Location**: The driver runs on one of the worker nodes in the cluster.
+- **Communication**: The client submits the job and disconnects; the cluster handles everything, making it more reliable for large, long-running jobs.
+- **Use Case**: Ideal for production and large-scale batch jobs where the job needs to be robust to client disconnections.  
+
+
+## Question 4 
 How is Apache Spark different from MapReduce?  
 A)  
 Here's a side-by-side comparison of **Apache Spark** and **MapReduce**:
@@ -40,7 +92,7 @@ Here's a side-by-side comparison of **Apache Spark** and **MapReduce**:
 In summary, Spark is faster and more flexible, while MapReduce is older and more disk-reliant. 
 
 
-## Question 3  
+## Question 5  
 What are the Key Features of the Spark Ecosystem?  
 A)  
 Here are the **key features of the Spark Ecosystem**:
@@ -59,7 +111,7 @@ Here are the **key features of the Spark Ecosystem**:
 
 These components make Spark highly versatile, supporting batch, real-time, machine learning, and graph processing tasks.
 
-## Question 4  
+## Question 6  
 Explain what RDD is?  
 A)  
 An **RDD (Resilient Distributed Dataset)** is a fundamental data structure in Apache Spark that represents an immutable distributed collection of objects. Here are the key features of RDDs:
@@ -77,7 +129,7 @@ An **RDD (Resilient Distributed Dataset)** is a fundamental data structure in Ap
 RDDs provide a powerful and efficient way to work with large datasets in a distributed environment, making them central to Spark's processing capabilities.
 
 
-## Question 5  
+## Question 7  
 What does DAG refer to in Apache Spark?  
 A)  
 In Apache Spark, **DAG** stands for **Directed Acyclic Graph**. It is a crucial concept in Spark's execution model. Here are the key points about DAGs in Spark:
@@ -95,7 +147,7 @@ In Apache Spark, **DAG** stands for **Directed Acyclic Graph**. It is a crucial 
 Overall, the DAG plays a vital role in how Spark manages and executes distributed data processing tasks efficiently.
 
 
-## Question 6  
+## Question 8  
 List the types of Deploy Modes in Spark?  
 A)  
 In Apache Spark, there are two main types of **deploy modes** that determine how the Spark driver and executors are launched:
@@ -113,13 +165,41 @@ In Apache Spark, there are two main types of **deploy modes** that determine how
 These deploy modes determine where the Spark driver will run, impacting job monitoring and fault tolerance.
 
 
-## Question 7
-
-## Question 8  
-
 ## Question 9  
+
+What is meant by Executor Memory in PySpark?  
+A)  
+**Executor Memory** in PySpark is the memory allocated to each executor in the cluster to run tasks and store data for shuffles and caching. It is crucial for performance and avoiding memory-related issues.
+
+- **Divided into**: Execution Memory (tasks), Storage Memory (caching), and Overhead.
+- **Set by**: `--executor-memory` (e.g., `--executor-memory 4G`).
+- **Tuning**: Key for performance. Too little causes garbage collection, too much wastes resources.
+
+This ensures optimal memory use for Spark jobs.
+
 
 ## Question 10  
 
 ## Question 11  
+
+
+## Question 12  
+
+## Question 13  
+
+## Question 14
+
+## Question 15  
+
+## Question 16  
+
+## Question 17  
+
+## Question 18  
+
+## Question 19  
+
+## Question 20  
+
+## Question 21  
 
