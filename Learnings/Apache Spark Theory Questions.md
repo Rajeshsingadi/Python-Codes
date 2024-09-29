@@ -1,7 +1,7 @@
 
 [1)What is Apache Spark?](#question-1)  
 [2)explain spark architecture?](#question-2)  
-[3)Under what scenarios are Client and Cluster modes used for deployment?](#question-3) 
+[3)Under what scenarios are Client and Cluster modes used for deployment?](#question-3)  
 [4)How is Apache Spark different from MapReduce?](#question-4)  
 [5)What are the Key Features of the Spark Ecosystem?](#question-5)  
 [6)Explain what RDD is?](#question-6)  
@@ -179,6 +179,7 @@ This ensures optimal memory use for Spark jobs.
 
 
 ## Question 10  
+This is a sample question
 
 ## Question 11  
 
