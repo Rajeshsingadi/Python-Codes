@@ -12,3 +12,15 @@ greet_udf = udf(greet, StringType())
 df = spark.createDataFrame([("Alice",), ("Bob",)], ["name"])
 df_with_greeting = df.withColumn("greeting", greet_udf(df["name"]))
 df_with_greeting.show()
+
+'''
+### Output:
+```
++-----+--------------+
+| name|       greeting|
++-----+--------------+
+|Alice|  Hello, Alice!|
+|  Bob|   Hello, Bob! |
++-----+--------------+
+```
+'''
