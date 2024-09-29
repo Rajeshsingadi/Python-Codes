@@ -1,17 +1,14 @@
-# k="rajesh"
-# print(ord(k[:1]))
-# print(range(ord('a'),ord('z')))
-# for i in range(ord('a'),ord('z')):
-#     print(chr(i))
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
 
-print("this is %2.0f %s" %(13.5555,'\trajesh'))
-print('{0:<8} | {1:^8} | {2:>8}'.format('Left','Center','Right'))
-print('{0:<8} | {1:^8} | {2:>8}'.format(11,22,33))
-new_list = ['a','e','x','b','c']
-p=new_list.pop()
-print(p)
-print(new_list)
-print(new_list.reverse())
-print(new_list)
-print(new_list.sort())
-print(new_list)
+
+spark = SparkSession.builder\
+            .appName("Sum Function")\
+            .getOrCreate()
+
+df = spark.createDataFrame([(12,), (13,)], ["id"])
+agg_df = df.agg({"id":"sum"})
+Total_df = agg_df.withColumnRenamed("sum(id)", "Total")
+Total_df.show(truncate=False)
+spark.stop()
