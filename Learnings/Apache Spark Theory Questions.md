@@ -8,15 +8,15 @@
 [7)What does DAG refer to in Apache Spark?](#question-7)  
 [8)List the types of Deploy Modes in Spark?](#question-8)  
 [9)What is meant by Executor Memory in PySpark?](#question-9)  
-[7)Sample question here?](#question-7)  
-[8)Sample question here?](#question-8)  
-[9)Sample question here?](#question-9)  
-[10)Sample question here?](#question-10)  
-[11)Sample question here?](#question-11)  
-[12)Sample question here?](#question-12)  
+[10)What are the main advantages of using PySpark over traditional Python for big data processing?](#question-10)  
+[11)What is PySpark?](#question-11)  
+[12)What is PySpark UDF?](#question-12)  
 [13)Sample question here?](#question-13)  
 [14)Sample question here?](#question-14)  
 [15)Sample question here?](#question-15)  
+[16)Sample question here?](#question-16)  
+[17)Sample question here?](#question-17)  
+[18)Sample question here?](#question-18)  
 
 
 
@@ -179,12 +179,93 @@ This ensures optimal memory use for Spark jobs.
 
 
 ## Question 10  
-This is a sample question
+What are the main advantages of using PySpark over traditional Python for big data processing?  
+A)  
+PySpark, the Python API for Apache Spark, offers several advantages over traditional Python for big data processing. These include:
+
+1. **Distributed Computing**: Leverages cluster resources for parallel processing and scalability.
+2. **Performance**: In-memory computation and optimized execution boost speed.
+3. **Ease of Use**: High-level API similar to Pandas simplifies transition for Python users.
+4. **Data Source Compatibility**: Integrates with HDFS, S3, and various data formats.
+5. **Machine Learning & Graph Processing**: Built-in libraries (MLlib, GraphX) facilitate complex analyses.
+6. **Community Support**: Active development within the Apache Spark ecosystem.
+7. **Fault Tolerance**: RDDs ensure data recovery from node failures.
+8. **Unified Processing**: Supports both batch and stream processing with a consistent API.
+
+These features make PySpark a powerful choice for handling large datasets efficiently. 
+
 
 ## Question 11  
+What is PySpark?  
+A)  
+**PySpark** is the Python API for **Apache Spark**, a powerful open-source framework for big data processing. It allows users to perform distributed data processing using Python, enabling efficient handling of large datasets.
+
+### Key Points:
+- **Distributed Computing**: Processes data across a cluster for scalability.
+- **DataFrame API**: Simplifies data manipulation, similar to Pandas.
+- **In-Memory Processing**: Faster computations by keeping data in memory.
+- **Integration**: Works with various data sources (HDFS, S3, NoSQL).
+- **Machine Learning**: Includes MLlib for building machine learning models.
+- **SQL Support**: Allows running SQL queries on structured data.
+- **Fault Tolerance**: Ensures data recovery with RDDs.
+
+PySpark is widely used in data analytics and engineering for its efficiency and ease of use.
 
 
 ## Question 12  
+What is PySpark UDF?  
+A)  
+A **PySpark UDF (User-Defined Function)** allows you to create custom functions in Python that can be applied to DataFrame columns. UDFs enable complex transformations or calculations that aren’t available with built-in Spark functions.
+
+### Key Points:
+- **Custom Logic**: Implement specific calculations tailored to your needs.
+- **Flexibility**: Can handle multiple input columns and return various output types.
+- **Integration**: Easily used in DataFrame operations and SQL queries.
+
+While UDFs provide great flexibility, they may be less performant than built-in functions, so they should be used when necessary.  
+
+Here’s a concise example of a PySpark UDF:
+
+### Example: Creating and Using a PySpark UDF
+
+1. **Import Libraries**:
+   ```python
+   from pyspark.sql import SparkSession
+   from pyspark.sql.functions import udf
+   from pyspark.sql.types import StringType
+   ```
+
+2. **Create a SparkSession**:
+   ```python
+   spark = SparkSession.builder.appName("UDFExample").getOrCreate()
+   ```
+
+3. **Define a UDF**:
+   ```python
+   def greet(name):
+       return f"Hello, {name}!"
+
+   greet_udf = udf(greet, StringType())
+   ```
+
+4. **Create a DataFrame and Apply the UDF**:
+   ```python
+   df = spark.createDataFrame([("Alice",), ("Bob",)], ["name"])
+   df_with_greeting = df.withColumn("greeting", greet_udf(df["name"]))
+   df_with_greeting.show()
+   ```
+
+### Output:
+```
++-----+--------------+
+| name|       greeting|
++-----+--------------+
+|Alice|  Hello, Alice!|
+|  Bob|   Hello, Bob! |
++-----+--------------+
+```
+
+This example defines a simple UDF that greets names and demonstrates how to apply it to a DataFrame.
 
 ## Question 13  
 
