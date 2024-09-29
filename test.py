@@ -1,14 +1,6 @@
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf
-from pyspark.sql.types import StringType
+list1 = [12,25,31,20,18]
+list2 = [11,9,43,22,55]
 
-
-spark = SparkSession.builder\
-            .appName("Sum Function")\
-            .getOrCreate()
-
-df = spark.createDataFrame([(12,), (13,)], ["id"])
-agg_df = df.agg({"id":"sum"})
-Total_df = agg_df.withColumnRenamed("sum(id)", "Total")
-Total_df.show(truncate=False)
-spark.stop()
+newList2 = list2[::-1]
+for i in range(len(list1)):
+    print(list1[i],newList2[i])

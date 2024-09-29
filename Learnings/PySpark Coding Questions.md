@@ -1,7 +1,7 @@
 
 [1)Write a spark program to check whether a given keyword exists in a huge text file or not?](#question-1)  
 [2)How do you create a SparkSession in PySpark? What are its main uses?](#question-2)  
-[3)Sample question here?](#question-3)
+[3)You have a DataFrame in PySpark with two columns: `name` (representing user names) and `skills` (containing a comma-separated list of skills). Write a PySpark script that counts the number of skills for each user and returns the names and skill counts of users who have the highest number of skills? ](#question-3)
 [4)Sample question here?](#question-4)
 [5)Sample question here?](#question-5)
 [6)Sample question here?](#question-6)
@@ -117,10 +117,80 @@ Imagine you have a CSV file containing millions of customer orders. You want to 
 - **Data Analysis**: Groups the data by product category and calculates the total sales using built-in aggregation functions.
 - **Saving Results**: Outputs the results back to a CSV file in HDFS.
 
-This example demonstrates how you can leverage `SparkSession` to efficiently analyze large datasets in a real-world scenario.
+This example demonstrates how you can leverage `SparkSession` to efficiently analyze large datasets in a real-world scenario. 
 
 
-## Question 1  
+## Question 3  
+You have a DataFrame in PySpark with two columns: `name` (representing user names) and `skills` (containing a comma-separated list of skills). Write a PySpark script that counts the number of skills for each user and returns the names and skill counts of users who have the highest number of skills. 
+
+
+```sql
+WITH SkillCounts AS (
+    SELECT 
+        name, 
+        LENGTH(skills) - LENGTH(REPLACE(skills, ',', '')) + 1 AS skill_count
+    FROM 
+        your_table
+)
+SELECT 
+    name,
+    skill_count
+FROM 
+    SkillCounts
+WHERE 
+    skill_count = (SELECT MAX(skill_count) FROM SkillCounts)
+```
+
+--- 
+
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, length, expr, regexp_replace
+
+# Create Spark session
+spark = SparkSession.builder.appName("Skill Count").getOrCreate()
+
+# Sample data (replace this with your actual DataFrame)
+data = [
+    ("Alice", "Python,SQL,Java"),
+    ("Bob", "Python"),
+    ("Charlie", "Python,SQL,Java,Scala"),
+    ("David", "Python,SQL"),
+    ("Eve", "Python,SQL,Java,C++"),
+    ("Frank", "SQL,Java")
+]
+
+columns = ["name", "skills"]
+df = spark.createDataFrame(data, columns)
+
+# Calculate skill counts
+skill_counts = df.withColumn(
+    "skill_count", 
+    length(col("skills")) - length(regexp_replace(col("skills"), ",", "")) + 1
+)
+
+# Find maximum skill count
+max_skill_count = skill_counts.agg({"skill_count": "max"}).collect()[0][0]
+
+# Filter users with the maximum skill count
+result = skill_counts.filter(col("skill_count") == max_skill_count).select("name", "skill_count")
+
+# Show results
+result.show()
+```
+### Expected Output:
+Running the above code will yield results similar to this (depending on the sample data):
+
+```
++-------+-----------+
+|   name|skill_count|
++-------+-----------+
+|  Eve  |          4|
+|Charlie|          4|
++-------+-----------+
+```
+
+
 
 ## Question 1  
 ## Question 1  
