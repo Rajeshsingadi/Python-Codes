@@ -1,6 +1,6 @@
 
 [1)What is Apache Spark?](#question-1)  
-[2)explain spark architecture?](#question-2)  
+[2)Explain Apark Architecture?](#question-2)  
 [3)Under what scenarios are Client and Cluster modes used for deployment?](#question-3)  
 [4)How is Apache Spark different from MapReduce?](#question-4)  
 [5)What are the Key Features of the Spark Ecosystem?](#question-5)  
@@ -11,12 +11,20 @@
 [10)What are the main advantages of using PySpark over traditional Python for big data processing?](#question-10)  
 [11)What is PySpark?](#question-11)  
 [12)What is PySpark UDF?](#question-12)  
-[13)Sample question here?](#question-13)  
-[14)Sample question here?](#question-14)  
-[15)Sample question here?](#question-15)  
-[16)Sample question here?](#question-16)  
-[17)Sample question here?](#question-17)  
-[18)Sample question here?](#question-18)  
+[13)What are the types of PySpark’s shared variables and why are they useful?](#question-13)  
+[14)What is the difference between Transformation and Action?](#question-14)  
+[15)What are all the optimisation techniques in pyspark? How you used any optimisation technique in your current project?](#question-15)  
+[16)Difference between cache and persists](#question-16)  
+[17)What is SparkSession in Pyspark?](#question-17)  
+[18)Is PySpark faster than pandas?](#question-18)  
+[19)Testing the changes?](#question-19)  
+[20)Sample question here?](#question-20)  
+[21)Sample question here?](#question-21)  
+[22)Sample question here?](#question-22)  
+[23)Sample question here?](#question-23)  
+[24)Sample question here?](#question-24)  
+[25)Sample question here?](#question-25)  
+
 
 
 
@@ -32,7 +40,7 @@ Apache Spark is an open-source, distributed computing system designed for big da
 
 
 ## Question 2  
-2) explain spark architecture?  
+2) Explain Spark Architecture?  
 A)  
 ### **Spark Architecture (High-level)**
 
@@ -268,16 +276,186 @@ Here’s a concise example of a PySpark UDF:
 This example defines a simple UDF that greets names and demonstrates how to apply it to a DataFrame.
 
 ## Question 13  
+What are the types of PySpark’s shared variables and why are they useful?  
+A)  
+In PySpark, there are two main types of shared variables: **broadcast variables** and **accumulators**.
 
-## Question 14
+1. **Broadcast Variables**: These allow you to share large, read-only data across all worker nodes, reducing network communication and improving performance. They’re useful for sharing lookup tables or reference datasets.
+
+2. **Accumulators**: These are variables that enable aggregation of values across tasks, such as counting errors or summing totals. They simplify the process of collecting metrics and provide fault tolerance.
+
+Both types enhance efficiency, consistency, and performance in distributed computations.  
+
+
+## Question 14  
+What is the difference between Transformation and Action?  
+A)  
+Here’s a comparision between actions and transformations in Spark:
+
+| **Feature**               | **Transformations**                        | **Actions**                             |
+|---------------------------|-------------------------------------------|-----------------------------------------|
+| **Definition**            | Operations that create new RDDs from existing ones. | Operations that trigger execution and return results. |
+| **Execution**             | Lazy; do not execute until an action is called. | Immediate; triggers the execution of the transformations. |
+| **Return Type**           | Returns a new RDD.                        | Returns a value or writes data to external storage. |
+| **Examples**              | `map()`, `filter()`, `flatMap()`, `reduceByKey()` | `collect()`, `count()`, `first()`, `saveAsTextFile()` |
+| **Effect on Data**        | Does not modify the original RDD; creates a new one. | May produce results or output data, impacting external storage. |
+| **Optimization**          | Allows Spark to optimize the execution plan. | Forces the computation of the data. |
+
 
 ## Question 15  
+What are all the optimisation techniques in pyspark? How you used any optimisation technique in your current project?  
+A)  
+Here are some common optimization techniques in PySpark:
+
+### Optimization Techniques
+
+1. **Caching and Persistence**: Use `cache()` or `persist()` to store intermediate results in memory, speeding up subsequent actions on the same data.
+
+2. **Broadcast Variables**: Use broadcast variables for large read-only datasets to reduce data transfer overhead across nodes.
+
+3. **Data Serialization**: Optimize data serialization by using efficient formats like Parquet or ORC, which provide better compression and faster I/O.
+
+4. **Partitioning**: Repartition or coalesce RDDs/DataFrames to optimize parallel processing, ensuring a balanced workload across partitions.
+
+5. **Avoid Shuffles**: Minimize operations that cause shuffles (e.g., `groupBy`, `join`) as they are costly. Use `reduceByKey` instead of `groupByKey` when applicable.
+
+6. **Predicate Pushdown**: Filter data as early as possible in your transformations to reduce the amount of data being processed.
+
+7. **Join Optimization**: Use the right join strategy (e.g., broadcast join for small tables) to minimize data shuffling during joins.
+
+8. **Skew Handling**: Handle data skew by salting keys or adjusting partitioning strategies to distribute data evenly.
+
+### Example of Using an Optimization Technique
+
+In my current project, I used **broadcast variables** to optimize joins between a large DataFrame and a smaller lookup table. By broadcasting the smaller table, I reduced the data shuffle during the join operation, significantly improving the performance of queries that required frequent access to the lookup data. This approach minimized network overhead and allowed the computation to complete faster.
+
+These techniques can lead to significant improvements in performance and resource utilization when working with large datasets in PySpark.
+
+Sure! Here are a few examples of optimization techniques in PySpark, along with code snippets to illustrate each technique:
+
+### 1. Caching and Persistence
+
+```python
+# Caching a DataFrame to improve performance
+df = spark.read.csv("large_data.csv", header=True)
+df.cache()  # Cache the DataFrame
+
+# Perform multiple actions on the cached DataFrame
+df.count()
+df.show()
+```
+
+### 2. Broadcast Variables
+
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import broadcast
+
+spark = SparkSession.builder.appName("Broadcast Example").getOrCreate()
+
+# Large DataFrame
+large_df = spark.read.csv("large_data.csv", header=True)
+
+# Small lookup DataFrame
+lookup_df = spark.read.csv("lookup.csv", header=True)
+
+# Broadcast the small DataFrame
+broadcasted_lookup = spark.sparkContext.broadcast(lookup_df.collect())
+
+# Perform a join using the broadcast variable
+result_df = large_df.join(broadcast(broadcasted_lookup), "key")
+```
+
+### 3. Data Serialization with Parquet
+
+```python
+# Saving DataFrame in Parquet format for efficient storage
+df.write.parquet("output_data.parquet")
+
+# Reading the Parquet file
+parquet_df = spark.read.parquet("output_data.parquet")
+```
+
+### 4. Partitioning
+
+```python
+# Repartitioning the DataFrame to optimize parallelism
+df = df.repartition(10)  # Increase partitions for better parallelism
+
+# Coalescing to reduce the number of partitions
+df = df.coalesce(5)  # Reduce to fewer partitions after heavy processing
+```
+
+### 5. Avoiding Shuffles
+
+```python
+# Using reduceByKey instead of groupByKey to minimize shuffling
+rdd = spark.sparkContext.parallelize([(1, "a"), (1, "b"), (2, "c")])
+result_rdd = rdd.reduceByKey(lambda x, y: x + y)  # More efficient than groupByKey
+```
+
+### 6. Predicate Pushdown
+
+```python
+# Filtering data early in the query to reduce data size
+filtered_df = df.filter(col("age") > 21)  # Apply filter before any expensive operations
+result = filtered_df.groupBy("city").count()
+```
+
+### Example in a Project Context
+
+In a recent project, we had a large customer transaction dataset and a smaller lookup table for customer information. We implemented the following optimizations:
+
+1. **Broadcast Variables**: We broadcasted the small customer lookup table before joining it with the large transactions dataset, significantly reducing shuffle and improving join performance.
+
+```python
+customer_lookup = spark.read.csv("customer_lookup.csv", header=True)
+broadcasted_lookup = spark.sparkContext.broadcast(customer_lookup.collect())
+
+transactions_df = spark.read.csv("transactions.csv", header=True)
+result_df = transactions_df.join(broadcast(broadcasted_lookup), "customer_id")
+```
+
+2. **Caching**: We cached the transactions DataFrame after filtering it to only include relevant records. This allowed us to reuse it multiple times without recomputing.
+
+```python
+filtered_transactions = transactions_df.filter(col("status") == "completed").cache()
+```
+
+These optimizations led to a reduction in processing time by nearly 30% for our data pipeline.  
+
 
 ## Question 16  
+Difference between cache and persists?  
+A)  
+Here’s a concise comparison between `cache()` and `persist()` in PySpark:
+
+### Cache vs. Persist
+
+| **Feature**               | **Cache**                                  | **Persist**                                |
+|---------------------------|-------------------------------------------|--------------------------------------------|
+| **Definition**            | A shorthand for persisting data in memory. | Allows more control over storage levels.   |
+| **Storage Level**         | Default storage level is `MEMORY_ONLY`.  | You can specify various storage levels (e.g., `MEMORY_AND_DISK`, `DISK_ONLY`, etc.). |
+| **Use Case**              | Simple caching of data for quick reuse.  | Useful when you need to choose how data is stored. |
+| **Flexibility**           | Less flexible, limited to memory storage. | More flexible, can accommodate different use cases. |
+| **Performance**           | Faster for repeated access if fits in memory. | Varies based on the chosen storage level. |
+
+### Summary
+- Use **`cache()`** for straightforward caching in memory.
+- Use **`persist()`** when you need more control over how and where the data is stored.  
+
 
 ## Question 17  
+What is SparkSession in Pyspark?  
+A)  
+SparkSession is the entry point to PySpark and is the replacement of SparkContext since PySpark version 2.0. This acts as a starting point to access all of the PySpark functionalities related to RDDs, DataFrame, Datasets etc. It is also a Unified API that is used in replacing the SQLContext, StreamingContext, HiveContext and all other contexts.  
+
 
 ## Question 18  
+Is PySpark faster than pandas?  
+A)  
+PySpark supports parallel execution of statements in a distributed environment, i.e on different cores and different machines which are not present in Pandas. This is why PySpark is faster than pandas.  
+
 
 ## Question 19  
 
