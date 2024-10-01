@@ -1,14 +1,14 @@
 
 [1)Write a spark program to check whether a given keyword exists in a huge text file or not?](#question-1)  
 [2)How do you create a SparkSession in PySpark? What are its main uses?](#question-2)  
-[3)You have a DataFrame in PySpark with two columns: `name` (representing user names) and `skills` (containing a comma-separated list of skills). Write a PySpark script that counts the number of skills for each user and returns the names and skill counts of users who have the highest number of skills? ](#question-3)
-[4)Sample question here?](#question-4)
-[5)Sample question here?](#question-5)
-[6)Sample question here?](#question-6)
-[7)Sample question here?](#question-7)
-[8)Sample question here?](#question-8)
-[9)Sample question here?](#question-9)
-[10)Sample question here?](#question-10)
+[3)You have a DataFrame in PySpark with two columns: `name` (representing user names) and `skills` (containing a comma-separated list of skills). Write a PySpark script that counts the number of skills for each user and returns the names and skill counts of users who have the highest number of skills? ](#question-3)  
+[4)How do you create a DataFrame from a CSV file in PySpark?](#question-4)  
+[5)How do you filter, select, and drop columns in PySpark DataFrames?](#question-5)  
+[6)?](#question-6)  
+[7)?](#question-7)  
+[8)?](#question-8)  
+[9)?](#question-9)  
+[10)?](#question-10)  
 
 
 
@@ -190,10 +190,70 @@ Running the above code will yield results similar to this (depending on the samp
 +-------+-----------+
 ```
 
+## Question 4  
+How do you create a DataFrame from a CSV file in PySpark?  
+A)  
+from pyspark.sql import SparkSession
+
+# Initialize SparkSession
+spark = SparkSession.builder \
+    .appName("CSV to DataFrame Example") \
+    .getOrCreate()
+
+# Path to the CSV file
+csv_file_path = "/path/to/your/file.csv"
+
+# Read CSV file into a DataFrame
+df = spark.read.csv(csv_file_path, header=True, inferSchema=True)
+
+# Show the first few rows of the DataFrame
+df.show()
 
 
-## Question 1  
-## Question 1  
-## Question 1  
+## Question 5  
+How do you filter, select, and drop columns in PySpark DataFrames?  
+A)  
+In PySpark, you can **filter**, **select**, and **drop** columns using simple methods provided by the DataFrame API.
+
+### 1. **Filter Rows:**
+You can filter rows based on a condition using the `filter()` or `where()` methods.
+
+```python
+# Filter rows where age > 25
+df_filtered = df.filter(df['age'] > 25)
+# or using where() (they are equivalent)
+df_filtered = df.where(df['age'] > 25)
+```
+
+### 2. **Select Columns:**
+To select specific columns, use the `select()` method.
+
+```python
+# Select 'name' and 'age' columns
+df_selected = df.select("name", "age")
+```
+
+### 3. **Drop Columns:**
+You can remove a column from a DataFrame using the `drop()` method.
+
+```python
+# Drop the 'age' column
+df_dropped = df.drop("age")
+```
+
+### Combined Example:
+```python
+# Filter rows where age > 25, select 'name' and 'age', and drop 'age'
+df_result = df.filter(df['age'] > 25).select("name", "age").drop("age")
+```
+
+These methods allow you to efficiently manipulate DataFrame columns and rows.
 
 
+## Question 6  
+
+## Question 7  
+
+## Question 8  
+## Question 9  
+## Question 10  
