@@ -1,6 +1,6 @@
 
 [1)What is Apache Spark?](#question-1)  
-[2)Explain Apark Architecture?](#question-2)  
+[2)Explain Spark Architecture?](#question-2)  
 [3)Under what scenarios are Client and Cluster modes used for deployment?](#question-3)  
 [4)How is Apache Spark different from MapReduce?](#question-4)  
 [5)What are the Key Features of the Spark Ecosystem?](#question-5)  
