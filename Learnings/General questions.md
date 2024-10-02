@@ -262,6 +262,52 @@ This automation not only improved efficiency but also ensured that the pipelines
 ## Question 8  
 Can you walk us through how you optimized a complex SQL query in one of your previous projects? What were the challenges and how did you overcome them?  
 A)  
+In one of my previous projects with **Adani Ports**, I encountered performance issues when running a complex SQL query in **Google BigQuery**. The query was used to generate insights from large port-related datasets, but it was underperforming due to long execution times, impacting the ability to deliver timely analytics.
+
+### Challenges:
+1. **Large Data Volumes**: The dataset contained millions of records, with both structured and unstructured data, which made the query inefficient due to the sheer volume of data processed.
+2. **Multiple Joins**: The query involved several joins between large tables, which resulted in heavy data shuffling and increased execution time.
+3. **Unnecessary Data Processing**: The query processed more data than required, as it didn’t filter irrelevant rows early in the process.
+4. **Data Duplication**: The query occasionally generated duplicated results due to improper handling of join conditions.
+
+### Steps I Took to Optimize the Query:
+
+#### 1. **Used Predicate Pushdown**:
+   - **Problem**: The query was processing unnecessary rows by applying filters late in the execution plan, which slowed down performance.
+   - **Solution**: I **moved filtering conditions** (WHERE clauses) earlier in the query using **predicate pushdown**. By filtering irrelevant data before joins and aggregations, I reduced the amount of data processed at each step.
+   - **Outcome**: This reduced the data volume significantly, cutting down execution time by about **20-30%**.
+
+#### 2. **Optimized Joins**:
+   - **Problem**: Multiple large tables were being joined without optimizing the join conditions, leading to data shuffling and long query times.
+   - **Solution**: I optimized the join order, starting with smaller tables and broadcasting them where applicable. In **Google BigQuery**, I used **JOIN hints** to influence the query planner and used **broadcast joins** for smaller datasets to reduce shuffling.
+   - **Outcome**: The optimized joins improved the query performance, reducing execution time by an additional **40%**.
+
+#### 3. **Created Materialized Views**:
+   - **Problem**: The query was computing complex aggregations and joins repeatedly, which was unnecessary as the data didn’t change frequently.
+   - **Solution**: I created **materialized views** for frequently accessed, pre-aggregated data using **CTEs (Common Table Expressions)**. This allowed the query to reuse precomputed results instead of recalculating them each time.
+   - **Outcome**: Materialized views significantly reduced the computation overhead, leading to a **60% reduction** in query time.
+
+#### 4. **Indexing and Partitioning**:
+   - **Problem**: The query scanned large datasets without leveraging indexing or partitioning, causing unnecessary reads and increasing execution time.
+   - **Solution**: I applied **date-based partitioning** on time-sensitive columns, allowing the query to scan only relevant partitions rather than the entire dataset. Additionally, I used **clustering** on frequently filtered columns, which helped in speeding up the filtering process.
+   - **Outcome**: Partitioning and clustering improved read performance, cutting execution time by **30-40%**.
+
+#### 5. **Reduced Data Duplication**:
+   - **Problem**: Some of the joins were causing data duplication due to improper handling of join keys and missing unique identifiers.
+   - **Solution**: I reviewed the join conditions and ensured proper key selections, removing any unnecessary fields that led to duplicates.
+   - **Outcome**: This eliminated data duplication and improved both performance and accuracy.
+
+### Tools and Techniques Used:
+- **Google BigQuery**: For executing and testing the optimized SQL queries.
+- **CTEs (Common Table Expressions)**: To break down the complex query into manageable parts and create materialized views.
+- **Broadcast Joins**: To reduce data shuffling for small tables.
+- **Partitioning and Clustering**: To limit the amount of data scanned during query execution.
+
+### Final Outcome:
+After these optimizations, the query’s execution time was reduced by **60-70%**, from several minutes to under a minute. This not only improved the performance of the overall pipeline but also ensured that the analytics team could access real-time insights without delays.
+
+This experience taught me the importance of query planning, join optimization, and leveraging advanced techniques like materialized views and predicate pushdown to handle complex queries efficiently in large-scale environments. 
+
 
 ## Question 9  
 ## Question 10  
