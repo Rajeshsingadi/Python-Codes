@@ -69,7 +69,7 @@ In Python, the main Object-Oriented Programming (OOP) concepts are:
 
 4. **Polymorphism**:
    - Allows objects of different classes to be treated as instances of the same class through method overriding or using functions that can work with different types.
-
+s
    Example:
    ```python
    class Cat:
