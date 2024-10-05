@@ -1,16 +1,44 @@
 General questions
 -----------------
 
-[1)Can you describe a challenging data engineering problem you faced in the past, and how you approached solving it? What tools did you use, and what was the outcome?](#question-1)  
+[1)Can you describe a challenging data engineering problem you faced in the past, and how you approached solving it? What tools did you use, and what was the outcome?](#question-1)   
+
 [2)How have you designed and implemented big data infrastructure and pipelines that scale to handle billions of structured and unstructured events daily? Can you provide an example?](#question-2)  
+
 [3)How do you ensure data quality (accuracy, consistency, completeness) across multiple systems? Describe a time when you encountered data quality issues and how you addressed them?](#question-3)  
+
 [4)Can you share an experience where you collaborated closely with product, data, and engineering teams to make data accessible for business or technical purposes? How did you ensure clear communication?](#question-4)  
+
 [5)What is your experience working with Google Cloud Platform, and how have you utilized services like BigQuery, Dataflow, or Cloud Storage in your data engineering projects?](#question-5)  
+
 [6)Have you optimized a data pipeline that was underperforming? What techniques and tools (e.g., Airflow, Spark) did you use to improve its performance?](#question-6)  
+
 [7)Describe your experience with automation in data pipelines. How have you used tools like Apache Airflow for job orchestration?](#question-7)  
+
 [8)Can you walk us through how you optimized a complex SQL query in one of your previous projects? What were the challenges and how did you overcome them?](#question-8)  
+
 [9)Can you describe a project where you used Apache Spark (PySpark/Spark SQL/Streaming) to solve a data processing challenge? What optimizations did you apply?](#question-9)  
+
 [10)How do you optimize Spark jobs for performance? Can you explain any specific techniques you’ve used?](#question-10)  
+
+
+[11)How do **Spark SQL** and **Spark DataFrames** differ from traditional SQL? Which one would you prefer in a large-scale data pipeline and why?](#question-11)  
+
+[12)Can you explain the difference between **ETL** and **ELT** processes, and in what scenarios would you choose one over the other?](#question-12)  
+
+[13)How do you decide between building a **data lake** or a **data warehouse** for a particular project? What factors do you consider?](#question-13)  
+
+[14)How do you handle **version control** and changes in data pipeline code or configurations?](#question-14)  
+
+[15)?](#question-15)  
+[16)?](#question-16)  
+[17)?](#question-17)  
+[18)?](#question-18)  
+[19)?](#question-19)  
+[20)?](#question-20)  
+
+
+
 
 
 ## Question 1  
@@ -405,3 +433,126 @@ Through these optimization techniques, I consistently reduced the runtime of Spa
 
 These techniques are crucial for making Spark jobs efficient and scalable when processing large datasets.  
 
+
+## Question 11  
+How do **Spark SQL** and **Spark DataFrames** differ from traditional SQL? Which one would you prefer in a large-scale data pipeline and why?  
+A)  
+**Spark SQL** and **Spark DataFrames** both provide ways to query and manipulate data in Apache Spark, but they differ from traditional SQL in key ways:
+
+- **Spark SQL**: 
+  - Similar to traditional SQL, it allows querying data using SQL-like syntax.
+  - It’s ideal for users familiar with SQL querying but requires explicit SQL queries for processing.
+
+- **Spark DataFrames**:
+  - An API that represents data as distributed collections, optimized for large-scale data processing.
+  - It offers better integration with Spark’s APIs (e.g., Scala, Python) and supports SQL-like operations programmatically (e.g., `filter`, `select`).
+
+**Preference** for large-scale data pipelines:
+- **Spark DataFrames** are generally preferred because:
+  - They offer better optimization through **Catalyst optimizer** and **Tungsten execution engine**, leading to more efficient execution.
+  - They provide more flexibility for integrating with other Spark APIs and are better suited for complex transformations at scale.  
+
+
+## Question 12  
+Can you explain the difference between **ETL** and **ELT** processes, and in what scenarios would you choose one over the other?  
+A)  
+**ETL (Extract, Transform, Load)** and **ELT (Extract, Load, Transform)** are both data integration processes, but they differ in the order and location of data transformation.
+
+### 1. **ETL (Extract, Transform, Load)**:
+   - **Process**: 
+     1. **Extract**: Data is extracted from source systems.
+     2. **Transform**: Data is transformed (cleaned, aggregated, enriched) in an external system (like a data integration tool) before loading.
+     3. **Load**: Transformed data is loaded into the target system, typically a data warehouse.
+   - **When to Use**: 
+     - When the **target system** (e.g., traditional data warehouse) has **limited processing power**.
+     - When you need to apply complex **transformations** upfront before loading.
+     - Typically used with **on-premise** systems.
+
+### 2. **ELT (Extract, Load, Transform)**:
+   - **Process**: 
+     1. **Extract**: Data is extracted from source systems.
+     2. **Load**: Raw data is loaded directly into the target system (e.g., data lake or cloud data warehouse).
+     3. **Transform**: Data is transformed within the target system, taking advantage of its processing power.
+   - **When to Use**:
+     - When the target system (e.g., cloud-based platforms like **BigQuery**, **Snowflake**) has **high processing power** and can handle transformations efficiently.
+     - When you need to **store raw data** for future flexibility in transformations.
+     - Best for **cloud-based** architectures where storage and compute resources can scale.
+
+### **Choosing Between ETL and ELT**:
+- **ETL** is ideal when:
+  - You need **strict data governance**.
+  - **Pre-processed**, clean data is required for downstream systems.
+  
+- **ELT** is better for:
+  - **Cloud-based environments** with scalable compute.
+  - Scenarios where you want **flexibility** in applying transformations later.
+
+
+## Question 13  
+How do you decide between building a **data lake** or a **data warehouse** for a particular project? What factors do you consider?  
+A)  
+The decision between building a **data lake** or a **data warehouse** depends on several factors related to the nature of the data, use cases, and business needs. Here are the key factors to consider:
+
+### 1. **Data Type**:
+   - **Data Lake**: Best suited for **unstructured** (e.g., images, text), **semi-structured** (e.g., JSON, XML), and **structured data**. It can store large volumes of raw data in its native format.
+   - **Data Warehouse**: Ideal for **structured** data that fits into predefined schemas, typically used for business reporting and analytics.
+
+   **Decision**: Choose a **data lake** for handling diverse data types, and a **data warehouse** when dealing mostly with structured, well-defined data.
+
+### 2. **Data Processing**:
+   - **Data Lake**: Supports **schema-on-read**, meaning data is stored in raw format and schema is applied when read. This allows flexibility in data processing.
+   - **Data Warehouse**: Follows a **schema-on-write** model, meaning data must be transformed and structured before loading. This ensures high consistency and performance for querying.
+
+   **Decision**: Use a **data warehouse** when you need consistent, fast querying and reporting. Use a **data lake** for flexibility and data exploration.
+
+### 3. **Use Case**:
+   - **Data Lake**: Suitable for **data science, machine learning**, and **exploratory analytics** where you need access to raw data.
+   - **Data Warehouse**: Ideal for **business intelligence** and **reporting** where you need fast, structured queries and analytics.
+
+   **Decision**: Opt for a **data warehouse** for BI and reporting needs, and a **data lake** for data science and experimentation.
+
+### 4. **Cost**:
+   - **Data Lake**: Typically cheaper to store large volumes of raw data because it uses more scalable and cost-effective storage solutions.
+   - **Data Warehouse**: More expensive due to optimized storage and compute resources for structured data and high query performance.
+
+   **Decision**: Choose a **data lake** if cost-effectiveness and scalability are priorities, and a **data warehouse** for high-performance querying despite higher costs.
+
+### 5. **Performance**:
+   - **Data Lake**: Slower for querying large volumes of raw data, especially if data needs to be transformed at query time.
+   - **Data Warehouse**: Optimized for fast, **OLAP** queries with high performance for complex aggregations and joins.
+
+   **Decision**: Use a **data warehouse** when performance is critical for querying structured data, and a **data lake** for flexible data storage with slower query performance.
+
+### 6. **Compliance & Governance**:
+   - **Data Lake**: Offers less governance and is harder to control for **data quality** and **security** due to its raw data storage.
+   - **Data Warehouse**: Enforces strict governance, ensuring **data quality, consistency,** and security.
+
+   **Decision**: A **data warehouse** is preferable when **governance** and **data quality** are critical, especially in highly regulated industries.
+
+### **Hybrid Approach**:
+In many cases, a **hybrid solution** using both a data lake and data warehouse can provide the best of both worlds:
+- **Data lake** for raw, unstructured data storage.
+- **Data warehouse** for structured, business-critical analytics.
+
+
+## Question 14  
+How do you handle **version control** and changes in data pipeline code or configurations?  
+A)  
+To handle **version control** in data pipelines:
+
+1. **Use Git**: Track pipeline code and configuration changes with a branching strategy (e.g., Git Flow).
+2. **Version Code and Configurations**: Use semantic versioning (e.g., v1.0.0) for scripts and configurations to ensure traceability.
+3. **Automated Testing and CI/CD**: Implement CI/CD pipelines for automated testing, validation, and deployment.
+4. **Document and Track Changes**: Use clear commit messages, change logs, and release notes.
+5. **Rollback and Disaster Recovery**: Keep previous versions for quick rollbacks in case of failures.
+6. **Environment-Specific Configs**: Separate configurations for dev, test, and prod environments.
+
+This ensures consistency, traceability, and smooth deployment of changes.  
+
+
+## Question 15  
+## Question 16  
+## Question 17  
+## Question 18  
+## Question 19  
+## Question 20  
