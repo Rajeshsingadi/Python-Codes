@@ -13,7 +13,7 @@
 [13)What are the types of PySpark’s shared variables and why are they useful?](#question-13)  
 [14)What is the difference between Transformation and Action?](#question-14)  
 [15)What are all the optimisation techniques in pyspark? How you used any optimisation technique in your current project?](#question-15)  
-[16)Difference between cache and persists](#question-16)  
+[16)Difference between cache and persists?](#question-16)  
 [17)What is SparkSession in Pyspark?](#question-17)  
 [18)Is PySpark faster than pandas?](#question-18)  
 [19)Explain lazy evaluation in Spark?](#question-19)  
