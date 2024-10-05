@@ -32,27 +32,27 @@ If multiple employees have the same salary, all of them should be included.
 
 
 Answer)  
-WITH OutPutTable AS (
-    SELECT 
-        d.Department_Name, 
-        e.Empname, 
-        e2.Empname AS Manager_Name, 
-        e.salary,
-        DENSE_RANK() OVER(PARTITION BY e.dept_id ORDER BY e.salary DESC) AS rnk
-    FROM 
-        Emp e
-    LEFT JOIN 
-        Emp e2 ON e.manager_id = e2.Id
-    JOIN 
-        Department d ON d.Department_Id = e.dept_id
-)
+WITH OutPutTable AS (  
+    SELECT   
+        d.Department_Name,   
+        e.Empname,   
+        e2.Empname AS Manager_Name,   
+        e.salary,  
+        DENSE_RANK() OVER(PARTITION BY e.dept_id ORDER BY e.salary DESC) AS rnk  
+    FROM  
+        Emp e  
+    LEFT JOIN   
+        Emp e2 ON e.manager_id = e2.Id  
+    JOIN   
+        Department d ON d.Department_Id = e.dept_id  
+)  
 
-SELECT 
-    Department_Name, 
+SELECT  
+    Department_Name,  
     Empname, 
-    Manager_Name, 
-    salary
-FROM 
-    OutPutTable
-WHERE 
+    Manager_Name,  
+    salary  
+FROM  
+    OutPutTable  
+WHERE  
     rnk = 1;
