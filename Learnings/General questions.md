@@ -9,8 +9,8 @@ General questions
 [6)Have you optimized a data pipeline that was underperforming? What techniques and tools (e.g., Airflow, Spark) did you use to improve its performance?](#question-6)  
 [7)Describe your experience with automation in data pipelines. How have you used tools like Apache Airflow for job orchestration?](#question-7)  
 [8)Can you walk us through how you optimized a complex SQL query in one of your previous projects? What were the challenges and how did you overcome them?](#question-8)  
-[9)?](#question-9)  
-[10)?](#question-10)  
+[9)Can you describe a project where you used Apache Spark (PySpark/Spark SQL/Streaming) to solve a data processing challenge? What optimizations did you apply?](#question-9)  
+[10)How do you optimize Spark jobs for performance? Can you explain any specific techniques you’ve used?](#question-10)  
 
 
 ## Question 1  
@@ -310,4 +310,98 @@ This experience taught me the importance of query planning, join optimization, a
 
 
 ## Question 9  
+Can you describe a project where you used Apache Spark (PySpark/Spark SQL/Streaming) to solve a data processing challenge? What optimizations did you apply?  
+A)  
+One of the notable projects where I used **Apache Spark (PySpark)** was in building a **data pipeline for Maruti Suzuki's automobile data**. The challenge involved processing large volumes of data efficiently while reducing the overall runtime, especially since the initial pipeline was developed using **Pandas**, which struggled with scalability for such large datasets.
+
+### Approach and Solution:
+- **Migration to PySpark**: I converted the original Pandas scripts to **PySpark** for handling large datasets in a distributed environment. This allowed the data to be processed in parallel across multiple nodes, making the pipeline much more scalable.
+  
+- **Caching and Persisting DataFrames**: I applied caching and persisting to frequently accessed DataFrames. This helped in avoiding repeated computations and reduced the processing time by caching interim results.
+
+- **Predicate Pushdown**: To optimize filtering, I implemented **predicate pushdown**, ensuring that only the necessary data was processed early in the pipeline, reducing data shuffling and computation overhead.
+
+- **Broadcast Joins**: I used **broadcast joins** for smaller datasets. This optimization minimized data movement between nodes, speeding up join operations when dealing with large data tables.
+
+### Tools and Optimizations Applied:
+- **PySpark**: For distributed data processing.
+- **Google Cloud Dataflow**: Used for further scalability in batch and stream processing.
+- **PySpark Optimizations**: Techniques like **cache**, **persist**, and **broadcast joins** were applied to reduce processing time by **1-2 hours**.
+- **Materialized Views**: Created **materialized views** using **CTEs (Common Table Expressions)** to pre-aggregate data, further reducing the load on the processing engine.
+
+### Outcome:
+The result of these optimizations led to a **10-15 minute reduction** in the runtime per pipeline and significantly improved the overall performance by approximately **30%**. This helped process millions of records efficiently, allowing timely delivery of insights to the business.
+
+
 ## Question 10  
+How do you optimize Spark jobs for performance? Can you explain any specific techniques you’ve used?  
+A)  
+Optimizing Spark jobs for performance is crucial, especially when working with large datasets. Over the years, I have used various techniques to improve the efficiency of Spark jobs, ensuring that they run faster, consume fewer resources, and avoid common pitfalls. Here are some of the key optimization techniques I’ve employed:
+
+### 1. **Caching and Persisting DataFrames**:
+   - **Purpose**: Repeatedly used DataFrames can be cached or persisted in memory/disk, so they are not recomputed each time they are accessed. This avoids costly recomputation in iterative algorithms or multi-stage pipelines.
+   - **Example**: In one of my projects, I cached frequently used DataFrames in PySpark, which reduced the need for recalculating transformations, speeding up the pipeline by **10-15 minutes** per run.
+   - **Usage**:
+     ```python
+     df.cache()  # Caches the DataFrame in memory
+     df.persist()  # Can cache to both memory and disk
+     ```
+
+### 2. **Broadcast Joins**:
+   - **Purpose**: When joining large datasets with smaller ones, Spark can broadcast the smaller dataset to all worker nodes, reducing shuffling. This is particularly useful when the smaller dataset fits in memory.
+   - **Example**: I used **broadcast joins** in the **Maruti Suzuki data pipeline** to optimize joins between large data tables and smaller lookup tables, which reduced data shuffling and improved join performance.
+   - **Usage**:
+     ```python
+     from pyspark.sql import functions as F
+     df_joined = df_large.join(F.broadcast(df_small), "key_column")
+     ```
+
+### 3. **Predicate Pushdown**:
+   - **Purpose**: Pushing filtering operations as early as possible in the data processing pipeline ensures that only the relevant data is processed, reducing the size of the dataset before more expensive operations like joins or aggregations.
+   - **Example**: In multiple projects, I implemented **predicate pushdown** by applying filtering conditions early in the process to limit the amount of data being processed, reducing unnecessary shuffling and improving overall query performance.
+   - **Usage**: Ensure that `filter()` or `where()` operations are applied as early as possible in the transformation steps.
+
+### 4. **Partitioning and Coalesce**:
+   - **Purpose**: Properly partitioning the data helps balance workloads across nodes and avoids stragglers. Similarly, reducing partitions (with `coalesce()`) after shuffle-heavy operations can optimize tasks by minimizing overhead.
+   - **Example**: I used **repartitioning** to increase parallelism when working with a large dataset and later applied `coalesce()` to reduce the number of partitions in the final output stage, ensuring faster writes.
+   - **Usage**:
+     ```python
+     df.repartition(100)  # Increase the number of partitions
+     df.coalesce(10)  # Reduce the number of partitions for output
+     ```
+
+### 5. **Avoiding Wide Transformations (Minimizing Shuffles)**:
+   - **Purpose**: Wide transformations, like `groupBy()` or `join()`, can cause large data shuffling between nodes. Minimizing these transformations or optimizing them using techniques like bucketing can improve performance.
+   - **Example**: In a previous project, I optimized wide transformations by ensuring that data was partitioned on the same key before the join operation, minimizing unnecessary shuffling.
+   - **Optimization Example**: Avoid multiple wide transformations in a row (e.g., avoid `groupBy()` immediately followed by `join()` without repartitioning).
+
+### 6. **Using Efficient Data Formats**:
+   - **Purpose**: Choosing efficient file formats (like **Parquet** or **ORC**) with compression can significantly reduce the amount of data that needs to be read from and written to disk.
+   - **Example**: I switched from CSV to **Parquet** format in a pipeline, which reduced data size by up to 70% and dramatically improved I/O performance.
+   - **Usage**:
+     ```python
+     df.write.parquet("path/to/save")
+     ```
+
+### 7. **Memory and Resource Tuning**:
+   - **Purpose**: Adjusting the executor and driver memory allocation, along with the number of cores, can prevent memory bottlenecks and improve resource utilization.
+   - **Example**: In one of my projects, I tuned the number of executors and executor memory based on the cluster configuration, ensuring optimal resource usage without causing failures due to memory limits.
+   - **Tuning Parameters**:
+     - `--executor-memory`: Amount of memory per executor.
+     - `--num-executors`: Number of executors.
+     - `--executor-cores`: Number of cores per executor.
+
+### 8. **Skew Mitigation**:
+   - **Purpose**: When some partitions or tasks take significantly longer to process due to uneven data distribution (skew), it leads to inefficient resource utilization. Detecting and handling skew is essential for balanced workload distribution.
+   - **Example**: I handled data skew in a PySpark job by identifying the key causing the skew and repartitioning the data to create more balanced partitions.
+
+### Tools Used:
+- **PySpark**: For distributed data processing and implementing the optimizations.
+- **Spark SQL**: For querying data efficiently with optimizations such as **predicate pushdown**.
+- **Apache Airflow**: For scheduling and monitoring the optimized Spark jobs, ensuring they ran at the right times without manual intervention.
+
+### Outcome:
+Through these optimization techniques, I consistently reduced the runtime of Spark jobs by **30-40%** and improved the overall scalability of data pipelines across projects. For example, in the Maruti Suzuki pipeline, I reduced the runtime by 1-2 hours using a combination of caching, broadcast joins, and filtering optimizations.
+
+These techniques are crucial for making Spark jobs efficient and scalable when processing large datasets.  
+
