@@ -1,4 +1,3 @@
-
 [1)What is Apache Spark?](#question-1)  
 [2)Explain Spark Architecture?](#question-2)  
 [3)Under what scenarios are Client and Cluster modes used for deployment?](#question-3)  
@@ -17,9 +16,9 @@
 [16)Difference between cache and persists](#question-16)  
 [17)What is SparkSession in Pyspark?](#question-17)  
 [18)Is PySpark faster than pandas?](#question-18)  
-[19)Testing the changes?](#question-19)  
-[20)Sample question here?](#question-20)  
-[21)Sample question here?](#question-21)  
+[19)Explain lazy evaluation in Spark?](#question-19)  
+[20)How do you perform transformations and actions in PySpark? Provide examples?](#question-20)  
+[21)What is the difference between map() and flatMap()?](#question-21)  
 [22)Sample question here?](#question-22)  
 [23)Sample question here?](#question-23)  
 [24)Sample question here?](#question-24)  
@@ -458,8 +457,99 @@ PySpark supports parallel execution of statements in a distributed environment, 
 
 
 ## Question 19  
+Explain lazy evaluation in Spark?  
+A)  
+Lazy evaluation in Spark means that transformations (like `map()`, `filter()`) are not executed immediately when called. Instead, Spark builds a logical plan (DAG) and waits until an action (like `count()`, `collect()`, `show()`) is invoked to trigger execution. This allows Spark to optimize the execution plan, improving performance by combining transformations and minimizing data shuffling.
+
+In short, lazy evaluation defers execution until necessary, enabling optimization and efficient resource use.
 
 ## Question 20  
+How do you perform transformations and actions in PySpark? Provide examples?  
+A)  
+In PySpark, **transformations** are operations that create a new DataFrame or RDD from an existing one but are lazily evaluated (i.e., they don’t execute until an action is called). **Actions**, on the other hand, trigger the execution of transformations and return results.
+
+### 1. **Transformations**:  
+Transformations are **lazy** and produce a new RDD or DataFrame. They build the execution plan but don’t perform any computation immediately.
+
+#### Examples:
+- **`filter()`**: Filters rows based on a condition.
+    ```python
+    df_filtered = df.filter(df['age'] > 25)  # Only rows with age > 25
+    ```
+  
+- **`select()`**: Selects specific columns from a DataFrame.
+    ```python
+    df_selected = df.select("name", "age")  # Select 'name' and 'age' columns
+    ```
+  
+- **`withColumn()`**: Adds or modifies a column.
+    ```python
+    df_with_column = df.withColumn('age_twice', df['age'] * 2)  # Adds new column 'age_twice'
+    ```
+
+- **`groupBy()`**: Groups the DataFrame by a specific column.
+    ```python
+    df_grouped = df.groupBy("department").count()  # Group by department and count occurrences
+    ```
+
+- **`join()`**: Joins two DataFrames.
+    ```python
+    df_joined = df1.join(df2, df1.id == df2.id, "inner")  # Inner join on 'id' column
+    ```
+
+### 2. **Actions**:  
+Actions **trigger** the execution of transformations and return results to the driver program.
+
+#### Examples:
+- **`show()`**: Displays the first 20 rows of the DataFrame.
+    ```python
+    df_filtered.show()  # Triggers execution and displays filtered rows
+    ```
+  
+- **`count()`**: Returns the number of rows in the DataFrame.
+    ```python
+    row_count = df.count()  # Triggers execution and returns the row count
+    ```
+
+- **`collect()`**: Retrieves all rows from the DataFrame as a list.
+    ```python
+    data = df.collect()  # Triggers
+
 
 ## Question 21  
+What is the difference between map() and flatMap()?  
+A) 
+Here's a side-by-side comparison of `map()` and `flatMap()` in PySpark:
+
+| Feature               | `map()`                                   | `flatMap()`                                |
+|-----------------------|-------------------------------------------|--------------------------------------------|
+| **Purpose**           | Transforms each element into one output. | Transforms each element into zero or more outputs and flattens the result. |
+| **Output Structure**  | Returns an RDD/DataFrame with the same number of elements as the input. | Returns an RDD/DataFrame that may have a different number of elements, as it flattens the results. |
+| **Usage**             | When you want to apply a function that returns a single value for each input. | When you want to apply a function that returns multiple values or a list for each input. |
+| **Example**           | `rdd.map(lambda x: x * 2)`<br> Produces: `[2, 4, 6]` for input `[1, 2, 3]`. | `rdd.flatMap(lambda x: [x, x * 2])`<br> Produces: `[1, 2, 2, 4, 3, 6]` for input `[1, 2, 3]`. |
+| **Flattening**        | Does not flatten the results.            | Flattens the results into a single list or RDD. |
+
+### Summary:
+- Use `map()` when each input element maps to one output element.
+- Use `flatMap()` when each input element can map to multiple output elements (or none), and you want the output to be flat.  
+
+## Question 22  
+
+## Question 23  
+
+## Question 24  
+
+## Question 25  
+
+## Question 26  
+
+## Question 27  
+
+## Question 28  
+
+## Question 29  
+
+## Question 30  
+
+
 
