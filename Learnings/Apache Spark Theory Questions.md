@@ -19,10 +19,15 @@
 [19)Explain lazy evaluation in Spark?](#question-19)  
 [20)How do you perform transformations and actions in PySpark? Provide examples?](#question-20)  
 [21)What is the difference between map() and flatMap()?](#question-21)  
-[22)Sample question here?](#question-22)  
-[23)Sample question here?](#question-23)  
-[24)Sample question here?](#question-24)  
+[22)What are RDDs (Resilient Distributed Datasets) in Spark, and how are they different from DataFrames and Datasets?](#question-22)  
+[23)What are shuffles in Spark, and how can you minimize their impact?](#question-23)  
+[24)How does PySpark differ from traditional Spark? Can you use Python libraries in PySpark?](#question-24)  
 [25)Sample question here?](#question-25)  
+[26)Sample question here?](#question-26)  
+[27)Sample question here?](#question-27)  
+[28)Sample question here?](#question-28)  
+[29)Sample question here?](#question-29)  
+[30)Sample question here?](#question-30)  
 
 
 
@@ -534,10 +539,45 @@ Here's a side-by-side comparison of `map()` and `flatMap()` in PySpark:
 - Use `flatMap()` when each input element can map to multiple output elements (or none), and you want the output to be flat.  
 
 ## Question 22  
+What are RDDs (Resilient Distributed Datasets) in Spark, and how are they different from DataFrames and Datasets?  
+A)  
+RDDs (Resilient Distributed Datasets) in Spark are the fundamental data structures that represent an immutable, distributed collection of objects. They are fault-tolerant, meaning they can automatically recover from node failures, and support parallel processing across a cluster. RDDs allow low-level transformations (like `map`, `filter`, `reduce`), giving users full control over their data.
+
+**Differences from DataFrames and Datasets:**
+- **DataFrames**: Higher-level abstraction built on top of RDDs, optimized for performance using Spark’s Catalyst optimizer. DataFrames represent data in a tabular format (rows and columns) and offer an API similar to SQL, with automatic optimization, making them more efficient than RDDs.
+- **Datasets**: A combination of RDDs and DataFrames, providing the best of both. They offer the type safety and object-oriented programming of RDDs, with the performance optimizations of DataFrames. Available in Scala and Java, but less common in Python.
+
+In summary, RDDs are more flexible but lack the optimizations provided by DataFrames and Datasets.  
+
 
 ## Question 23  
+What are shuffles in Spark, and how can you minimize their impact?  
+A)  
+Shuffles in Spark occur when data is redistributed across different partitions or nodes, typically during operations like `groupBy`, `join`, or `reduceByKey`. This process involves transferring data between executors, which can be time-consuming and resource-intensive, leading to potential performance bottlenecks.
+
+**To minimize the impact of shuffles:**
+1. **Use narrow transformations**: Prefer narrow transformations (like `map`, `filter`) that don’t require data movement between partitions.
+2. **Partition tuning**: Increase the number of partitions to distribute the shuffle load more evenly. Use the `repartition` or `coalesce` methods strategically.
+3. **Avoid full shuffles**: Use operations like `reduceByKey` or `combineByKey` instead of `groupByKey`, as they reduce data during the shuffle phase.
+4. **Caching**: Cache frequently used data to prevent recomputation and additional shuffles.
+5. **Broadcast joins**: For smaller datasets, use broadcast joins to avoid a full shuffle by broadcasting the smaller dataset to all nodes.
+
+These techniques help improve Spark job performance by reducing the cost of shuffles.
 
 ## Question 24  
+How does PySpark differ from traditional Spark? Can you use Python libraries in PySpark?  
+A)  
+**PySpark** is the Python API for Apache Spark, allowing users to write Spark applications using Python. It provides a higher-level interface compared to traditional Spark (which typically uses Scala or Java). 
+
+**Key differences:**
+1. **Language**: PySpark uses Python, while traditional Spark primarily uses Scala or Java. This makes PySpark more accessible to Python developers but can sometimes result in slightly lower performance due to the overhead of Python's dynamic typing and inter-language communication with Spark's underlying JVM-based engine.
+2. **Performance**: Scala and Java-based Spark applications may perform faster than PySpark because Spark is written in Scala, and running Python involves serialization and deserialization (Python-JVM interaction).
+3. **APIs**: PySpark has access to most Spark features, but certain advanced optimizations and low-level functionalities are better supported in Scala or Java.
+
+**Using Python libraries in PySpark**: Yes, you can use Python libraries like Pandas, NumPy, or SciPy in PySpark by leveraging the `mapPartitions` or `map` function to apply Python code on each partition. However, operations that require distributed processing must be converted into PySpark DataFrame or RDD transformations, as most Python libraries are not inherently distributed.
+
+For example, you can use Pandas within PySpark by converting PySpark DataFrames to Pandas DataFrames using `.toPandas()`, but this will bring all data to a single node, which may not be scalable for large datasets.  
+
 
 ## Question 25  
 
