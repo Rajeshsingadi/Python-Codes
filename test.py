@@ -1,31 +1,21 @@
 from pyspark.sql import SparkSession
-from pyspark.sql import SQLContext
-from pyspark import SparkContext
+from pyspark.sql.functions import broadcast,lit
 
-sc = SparkContext.getOrCreate()
-sqlContext = SQLContext(sc)
+spark = SparkSession.builder.enableHiveSupport().appName("BroadCastJoin").getOrCreate()
 
-data = [(1,), (2,), (3,), (1,), (3,)]
-columns = ["ID"]
 
-spark = SparkSession.builder.appName("Count SQL").getOrCreate()
+df_file1 = spark.read.option("header","true").csv("pathtofile1.csv")
+df_file2 = spark.read.option("header","true").csv("pathtofile2.csv")
 
-df = sqlContext.createDataFrame(data, columns)
+# (Id,Name)
+df_file1 = df_file1.withColumn("Id", df_file1["Id"].cast("int"))
 
-# Register the DataFrame as a temporary table
-df.createOrReplaceTempView("emp")
+# (Id,Salary)
+df_file2 = df_file2.withColumn("Id", df_file2["Id"].cast("int"))\
+                    .withColumn("Salary", df_file2["Salary"].cast("float"))
 
-# Execute SQL query using SQLContext
-result_df = sqlContext.sql("""
-    WITH IdCount AS (
-        SELECT Id, COUNT(*) AS count
-        FROM emp
-        GROUP BY Id
-    )
-    SELECT Id, count
-    FROM IdCount
-    WHERE count > 1
-""")
+df_joined = df_file1.join(broadcast(df_file2), on="Id", how="inner")
 
-# Show the result
-result_df.show(truncate=False)
+df_final = df_joined.withColumn("status", lit("a"))
+
+df_final.write.mode("overwrite").saveAsTable("employee_data_hive")
