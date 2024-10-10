@@ -4,7 +4,7 @@ Interview questions
 [1)Write a result for left,right and full outer join when we join below tables?  Table A - 1 1 2 1 4 3 and Table B - 1 2 1 2 3 3 ?](#question-1)  
 [2)?](#question-2)  
 [3)Write a SQL query to calculate the cumulative sum of sales for each employee (`empld`) ordered by `sales_date`?](#question-3)  
-[4)?](#question-4)  
+[4)SQL QUERY to delete the duplicates and keep the record with minimum age?](#question-4)  
 [5)To find employees who have a greater salary than their manager?](#question-5)  
 [6)File 1 - Id,Name File 2 - Id, Salary Read two files, apply schema, do broadcast join assuming file 2 data is less. Add one status column and populate 'a' as active status and load to hive table?](#question-6)  
 
@@ -191,6 +191,9 @@ Assuming the data is correctly set up, the output will look like this:
 
 This output reflects the cumulative sales for each employee over time.
 ## Question 4  
+SQL QUERY to delete the duplicates and keep the record with minimum age?  
+A)  
+
 WITH ranked_employees AS (
     SELECT ID, Name, Age,
            ROW_NUMBER() OVER (PARTITION BY Name ORDER BY Age ASC) AS row_num
