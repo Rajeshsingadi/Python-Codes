@@ -23,7 +23,7 @@
 [23)What are shuffles in Spark, and how can you minimize their impact?](#question-23)  
 [24)How does PySpark differ from traditional Spark? Can you use Python libraries in PySpark?](#question-24)  
 [25)Difference between datalake, datawarehouse and datalake?](#question-25)  
-[26)Sample question here?](#question-26)  
+[26)What is the difference between partitioning and bucketing?](#question-26)  
 [27)Sample question here?](#question-27)  
 [28)Sample question here?](#question-28)  
 [29)Sample question here?](#question-29)  
@@ -606,6 +606,34 @@ Here's a side-by-side comparison of databases, data warehouses, and data lakes a
 This comparison should help clarify the roles and characteristics of each system within a data architecture.
 
 ## Question 26  
+What is the difference between partitioning and bucketing?  
+A)  
+Partitioning:  
+Divides large tables into smaller tables based on the values of a specified column. This technique improves data retrieval and query performance.  
+Example:  
+# Sample DataFrame
+data = [("John", "Sales", 1000), 
+        ("Jane", "Marketing", 2000), 
+        ("Jake", "Sales", 3000), 
+        ("Jill", "HR", 4000)]
+columns = ["Name", "Department", "Salary"]
+df = spark.createDataFrame(data, columns)
+
+# Partitioning the data by Department
+df.write.partitionBy("Department").parquet("/path/to/output/partitioned_data")
+
+Bucketing  
+Subdivides data within partitions using a hash function. This technique improves join operations.  
+Example:  
+# Enabling Hive support for bucketing (requires Hive support in Spark)
+spark.sql("SET hive.enforce.bucketing = true")
+
+# Writing a DataFrame with bucketing
+df.write.bucketBy(4, "Salary").saveAsTable("bucketed_data")
+
+# This will distribute the data into 4 buckets based on the Salary column.
+
+
 
 ## Question 27  
 

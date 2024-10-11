@@ -30,8 +30,8 @@ General questions
 
 [14)How do you handle **version control** and changes in data pipeline code or configurations?](#question-14)  
 
-[15)?](#question-15)  
-[16)?](#question-16)  
+[15)Can you describe a project where you developed batch and streaming pipelines using SQL, Spark, Python, and PySpark? What challenges did you face, and how did you optimize performance?](#question-15)  
+[16)How do you approach optimizing SQL and PySpark code for performance in large-scale distributed systems?](#question-16)  
 [17)?](#question-17)  
 [18)?](#question-18)  
 [19)?](#question-19)  
@@ -551,7 +551,32 @@ This ensures consistency, traceability, and smooth deployment of changes.
 
 
 ## Question 15  
+Can you describe a project where you developed batch and streaming pipelines using SQL, Spark, Python, and PySpark? What challenges did you face, and how did you optimize performance?   
+A)  
+In a recent project, I developed batch and streaming pipelines using SQL, Python, and PySpark on GCP. The batch pipeline processed historical data in Google BigQuery, while the streaming pipeline ingested real-time data through Google Cloud Storage. I used PySpark in Google Cloud Dataflow to process the streaming data at scale.
+
+One challenge was optimizing the performance of these pipelines. To address this, I applied techniques like caching frequently used DataFrames, using predicate pushdown to filter data early, and optimizing joins by reducing shuffles. Additionally, I tuned the Dataflow job configurations to improve memory management and parallelism, which helped reduce the processing time by 1-2 hours per pipeline.  
+
 ## Question 16  
+How do you approach optimizing SQL and PySpark code for performance in large-scale distributed systems?  
+A)  
+To optimize SQL and PySpark code for performance in large-scale distributed systems, I follow these key strategies:
+
+1. **Data Partitioning**: I ensure the data is properly partitioned across the cluster to prevent data skew and improve parallelism. For SQL, I use partitioning and bucketing, while in PySpark, I control the number of partitions based on data size.
+
+2. **Predicate Pushdown**: I push filters down to the data source early in the processing to reduce the amount of data being read and shuffled, which is crucial for both SQL and PySpark queries.
+
+3. **Efficient Joins**: I optimize joins by using broadcast joins when the smaller dataset fits into memory, avoiding expensive shuffles. In SQL, I ensure join keys are indexed and match partitioning schemes.
+
+4. **Caching and Persisting**: For frequently accessed DataFrames or tables, I cache or persist them in memory, reducing redundant computations during iterative processing in PySpark.
+
+5. **Avoiding Wide Transformations**: In PySpark, I minimize the use of wide transformations (e.g., `groupBy`, `join`, `repartition`) that involve shuffling large amounts of data across nodes. Where necessary, I repartition the data efficiently before the transformation.
+
+6. **Tuning Resource Configurations**: I fine-tune cluster resources such as memory, cores, and executors based on the workload. In SQL databases, I optimize query execution plans by analyzing them through `EXPLAIN` statements to address inefficiencies.
+
+These optimizations significantly reduce execution time and resource consumption, especially when processing large datasets.  
+
+
 ## Question 17  
 ## Question 18  
 ## Question 19  
