@@ -22,7 +22,7 @@
 [22)What are RDDs (Resilient Distributed Datasets) in Spark, and how are they different from DataFrames and Datasets?](#question-22)  
 [23)What are shuffles in Spark, and how can you minimize their impact?](#question-23)  
 [24)How does PySpark differ from traditional Spark? Can you use Python libraries in PySpark?](#question-24)  
-[25)Sample question here?](#question-25)  
+[25)Difference between datalake, datawarehouse and datalake?](#question-25)  
 [26)Sample question here?](#question-26)  
 [27)Sample question here?](#question-27)  
 [28)Sample question here?](#question-28)  
@@ -580,6 +580,30 @@ For example, you can use Pandas within PySpark by converting PySpark DataFrames 
 
 
 ## Question 25  
+Difference between datalake, datawarehouse and datalake?  
+A)  
+Here's a side-by-side comparison of databases, data warehouses, and data lakes across various dimensions:
+
+| Feature                | **Database**                              | **Data Warehouse**                          | **Data Lake**                                |
+|------------------------|-------------------------------------------|--------------------------------------------|----------------------------------------------|
+| **Purpose**            | Store and manage transactional data       | Store and analyze historical data          | Store vast amounts of raw and processed data |
+| **Data Structure**     | Typically normalized                       | Often denormalized (star/snowflake schemas)| Can store structured, semi-structured, and unstructured data |
+| **Data Type**          | Primarily operational data                | Historical and aggregated data             | Raw data from various sources (e.g., logs, images, text) |
+| **Schema**             | Schema-on-write (fixed schema)           | Schema-on-write (designed for analytics)  | Schema-on-read (schema applied when data is read) |
+| **Query Performance**  | Optimized for quick transactions          | Optimized for complex queries and reporting| Performance can vary; may require additional processing |
+| **Users**              | Operational users (e.g., application developers) | Business analysts and decision-makers      | Data scientists, engineers, and analysts     |
+| **Data Updates**       | Frequent real-time updates                | Batch updates (daily, weekly)              | Data is added continuously; updates are rare |
+| **Data Volume**        | Limited to operational data size          | Large volumes, but smaller than data lakes | Extremely large volumes, often petabytes or more |
+| **Storage Cost**       | Generally higher due to performance optimization | Moderate cost, optimized for storage and query performance | Generally lower cost for storing large amounts of data |
+| **ETL Process**        | ETL (Extract, Transform, Load) required for operations | ETL required to load data into the warehouse | ELT (Extract, Load, Transform) can be used; transformations are applied later |
+| **Tools and Technologies** | RDBMS like MySQL, PostgreSQL, Oracle, SQL Server | Solutions like Amazon Redshift, Snowflake, Google BigQuery | Technologies like Apache Hadoop, Apache Spark, Amazon S3, Azure Data Lake Storage |
+
+### Summary
+- **Databases** are best for operational tasks requiring real-time data access.
+- **Data Warehouses** are designed for analytical tasks, providing structured data for reporting and analysis.
+- **Data Lakes** offer flexibility in storing vast amounts of diverse data types, catering to big data analytics and machine learning applications.
+
+This comparison should help clarify the roles and characteristics of each system within a data architecture.
 
 ## Question 26  
 
