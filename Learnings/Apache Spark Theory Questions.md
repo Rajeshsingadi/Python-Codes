@@ -24,7 +24,7 @@
 [24)How does PySpark differ from traditional Spark? Can you use Python libraries in PySpark?](#question-24)  
 [25)Difference between datalake, datawarehouse and datalake?](#question-25)  
 [26)What is the difference between partitioning and bucketing?](#question-26)  
-[27)Sample question here?](#question-27)  
+[27)What is the Delta Lake?](#question-27)  
 [28)Sample question here?](#question-28)  
 [29)Sample question here?](#question-29)  
 [30)Sample question here?](#question-30)  
@@ -242,45 +242,46 @@ While UDFs provide great flexibility, they may be less performant than built-in 
 
 Here’s a concise example of a PySpark UDF:
 
+```
 ### Example: Creating and Using a PySpark UDF
 
 1. **Import Libraries**:
-   ```python
+   python
    from pyspark.sql import SparkSession
    from pyspark.sql.functions import udf
    from pyspark.sql.types import StringType
-   ```
+   
 
 2. **Create a SparkSession**:
-   ```python
+   python
    spark = SparkSession.builder.appName("UDFExample").getOrCreate()
-   ```
+   
 
 3. **Define a UDF**:
-   ```python
+   python
    def greet(name):
        return f"Hello, {name}!"
 
    greet_udf = udf(greet, StringType())
-   ```
+   
 
 4. **Create a DataFrame and Apply the UDF**:
-   ```python
+   python
    df = spark.createDataFrame([("Alice",), ("Bob",)], ["name"])
    df_with_greeting = df.withColumn("greeting", greet_udf(df["name"]))
    df_with_greeting.show()
-   ```
+   
 
 ### Output:
-```
+
 +-----+--------------+
 | name|       greeting|
 +-----+--------------+
 |Alice|  Hello, Alice!|
 |  Bob|   Hello, Bob! |
 +-----+--------------+
-```
 
+```
 This example defines a simple UDF that greets names and demonstrates how to apply it to a DataFrame.
 
 ## Question 13  
@@ -477,6 +478,7 @@ How do you perform transformations and actions in PySpark? Provide examples?
 A)  
 In PySpark, **transformations** are operations that create a new DataFrame or RDD from an existing one but are lazily evaluated (i.e., they don’t execute until an action is called). **Actions**, on the other hand, trigger the execution of transformations and return results.
 
+
 ### 1. **Transformations**:  
 Transformations are **lazy** and produce a new RDD or DataFrame. They build the execution plan but don’t perform any computation immediately.
 
@@ -612,8 +614,10 @@ This comparison should help clarify the roles and characteristics of each system
 ## Question 26  
 What is the difference between partitioning and bucketing?  
 A)  
+```
 Partitioning:  
 Divides large tables into smaller tables based on the values of a specified column. This technique improves data retrieval and query performance.  
+
 Example:  
 # Sample DataFrame
 data = [("John", "Sales", 1000), 
@@ -628,6 +632,7 @@ df.write.partitionBy("Department").parquet("/path/to/output/partitioned_data")
 
 Bucketing  
 Subdivides data within partitions using a hash function. This technique improves join operations.  
+
 Example:  
 # Enabling Hive support for bucketing (requires Hive support in Spark)
 spark.sql("SET hive.enforce.bucketing = true")
@@ -639,8 +644,18 @@ df.write.bucketBy(4, "Salary").saveAsTable("bucketed_data")
 
 For filtering large datasets: Partitioning is faster.
 For joining large datasets: Bucketing is faster. 
+```
 
 ## Question 27  
+What is the Delta Lake?  
+A)  
+**Delta Lake** is an open-source storage layer that brings **ACID transactions** and **schema enforcement** to data lakes, ensuring data reliability and consistency. Built on top of **Apache Spark**, it allows for efficient handling of both **batch** and **streaming data**. Key benefits include:
+- **ACID Transactions**: Ensures reliable and consistent data processing.
+- **Schema Enforcement**: Prevents bad data from being written by enforcing schema rules.
+- **Time Travel**: Allows querying previous versions of data for audits or rollbacks.
+
+It solves common data lake challenges like data corruption and supports large-scale data processing with features like **data versioning** and **performance optimization**.  
+
 
 ## Question 28  
 

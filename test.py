@@ -1,23 +1,27 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import broadcast,lit
+from pyspark.sql.functions import udf, length, regexp_replace, col
+from pyspark.sql.types import StringType
 
-spark = SparkSession.builder.enableHiveSupport().appName("BroadCastJoin").getOrCreate()
+spark = SparkSession.builder.appName("Comma Seperated Max").getOrCreate()
 
 
-df_file1 = spark.read.option("header","true").csv("pathtofile1.csv")
-df_file2 = spark.read.option("header","true").csv("pathtofile2.csv")
+data = [
+    ("Alice", "Python,SQL,Java"),
+    ("Bob", "Python"),
+    ("Charlie", "Python,SQL,Java,Scala"),
+    ("David", "Python,SQL"),
+    ("Eve", "Python,SQL,Java,C++"),
+    ("Frank", "SQL,Java")
+]
 
-# (Id,Name)
-df_file1 = df_file1.withColumn("Id", df_file1["Id"].cast("int"))
+columns = ["name", "skills"]
 
-# (Id,Salary)
-df_file2 = df_file2.withColumn("Id", df_file2["Id"].cast("int"))\
-                    .withColumn("Salary", df_file2["Salary"].cast("float"))
+df = spark.createDataFrame(data,columns)
 
-df_joined = df_file1.join(broadcast(df_file2), on="Id", how="inner")
 
-df_final = df_joined.withColumn("status", lit("a"))
+df_skill = df.withColumn("SkillCount", length(col("skills")) - length(regexp_replace(col("skills"), ",", "")) +1 )
 
-df_final.write.mode("overwrite").saveAsTable("employee_data_hive")
+max_skill_count = df_skill.agg({"SkillCount":"max"} ).collect()[0][0]
+result = df_skill.filter(col("SkillCount")==max_skill_count)
 
-spark.stop()
+result.show()

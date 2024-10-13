@@ -4,7 +4,7 @@
 [3)You have a DataFrame in PySpark with two columns: `name` (representing user names) and `skills` (containing a comma-separated list of skills). Write a PySpark script that counts the number of skills for each user and returns the names and skill counts of users who have the highest number of skills? ](#question-3)  
 [4)How do you create a DataFrame from a CSV file in PySpark?](#question-4)  
 [5)How do you filter, select, and drop columns in PySpark DataFrames?](#question-5)  
-[6)?](#question-6)  
+[6)How to use udf functions?](#question-6)  
 [7)?](#question-7)  
 [8)?](#question-8)  
 [9)?](#question-9)  
@@ -251,6 +251,27 @@ These methods allow you to efficiently manipulate DataFrame columns and rows.
 
 
 ## Question 6  
+How to use UDF Functions?  
+A)  
+```
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
+
+spark = SparkSession.builder.appName("UDF Function").getOrCreate()
+
+def udf_function(Name):
+    return f"Hello {Name}! I'm good. How are you?"
+
+data = [("raj", 26 ), ("sita", 27),("ram", 28)]
+columns = ["Name", "Age"]
+df = spark.createDataFrame(data,columns)
+
+greetings_udf = udf(udf_function, StringType())
+df_Greeting = df.withColumn("Greeting", greetings_udf(df["Name"]))
+df_Greeting.show(truncate=False)
+
+```
 
 ## Question 7  
 
