@@ -7,6 +7,10 @@ Interview questions
 [4)SQL QUERY to delete the duplicates and keep the record with minimum age?](#question-4)  
 [5)To find employees who have a greater salary than their manager?](#question-5)  
 [6)File 1 - Id,Name File 2 - Id, Salary Read two files, apply schema, do broadcast join assuming file 2 data is less. Add one status column and populate 'a' as active status and load to hive table?](#question-6)  
+[7)Difference between datalake, datawarehouse and datalake?](#question-7)  
+[8)What are the optimization techniques you have used in hive?](#question-8)  
+[9)?](#question-9)  
+[10)?](#question-10)  
 
 
 ## Question 1  
@@ -292,6 +296,54 @@ spark.stop()
 
 
 ## Question 7  
+Difference between datalake, datawarehouse and datalake?  
+A)  
+Here's a side-by-side comparison of databases, data warehouses, and data lakes across various dimensions:
+
+| Feature                | **Database**                              | **Data Warehouse**                          | **Data Lake**                                |
+|------------------------|-------------------------------------------|--------------------------------------------|----------------------------------------------|
+| **Purpose**            | Store and manage transactional data       | Store and analyze historical data          | Store vast amounts of raw and processed data |
+| **Data Structure**     | Typically normalized                       | Often denormalized (star/snowflake schemas)| Can store structured, semi-structured, and unstructured data |
+| **Data Type**          | Primarily operational data                | Historical and aggregated data             | Raw data from various sources (e.g., logs, images, text) |
+| **Schema**             | Schema-on-write (fixed schema)           | Schema-on-write (designed for analytics)  | Schema-on-read (schema applied when data is read) |
+| **Query Performance**  | Optimized for quick transactions          | Optimized for complex queries and reporting| Performance can vary; may require additional processing |
+| **Users**              | Operational users (e.g., application developers) | Business analysts and decision-makers      | Data scientists, engineers, and analysts     |
+| **Data Updates**       | Frequent real-time updates                | Batch updates (daily, weekly)              | Data is added continuously; updates are rare |
+| **Data Volume**        | Limited to operational data size          | Large volumes, but smaller than data lakes | Extremely large volumes, often petabytes or more |
+| **Storage Cost**       | Generally higher due to performance optimization | Moderate cost, optimized for storage and query performance | Generally lower cost for storing large amounts of data |
+| **ETL Process**        | ETL (Extract, Transform, Load) required for operations | ETL required to load data into the warehouse | ELT (Extract, Load, Transform) can be used; transformations are applied later |
+| **Tools and Technologies** | RDBMS like MySQL, PostgreSQL, Oracle, SQL Server | Solutions like Amazon Redshift, Snowflake, Google BigQuery | Technologies like Apache Hadoop, Apache Spark, Amazon S3, Azure Data Lake Storage |
+
+### Summary
+- **Databases** are best for operational tasks requiring real-time data access.
+- **Data Warehouses** are designed for analytical tasks, providing structured data for reporting and analysis.
+- **Data Lakes** offer flexibility in storing vast amounts of diverse data types, catering to big data analytics and machine learning applications.
+
+This comparison should help clarify the roles and characteristics of each system within a data architecture.
+
 ## Question 8  
+What are the optimization techniques you have used in hive?  
+A)  
+Here are some optimization techniques for Apache Hive:
+
+- **Partitioning**: Organize data into partitions based on specific columns (e.g., date) to minimize data scanned during queries.
+
+- **Bucketing**: Divide data into fixed-size buckets based on a hash function, improving join performance and data retrieval.
+
+- **Compression**: Use compression algorithms (e.g., Snappy, Gzip) to reduce data size and improve read times.
+
+- **Columnar Storage Formats**: Store data in columnar formats like ORC or Parquet for better performance with analytical queries.
+
+- **Predicate Pushdown**: Apply filters as early as possible in the query execution to reduce the amount of data processed.
+
+- **Join Optimization**: Implement map-side joins or broadcast joins for smaller tables to reduce shuffling during join operations.
+
+- **Use of Hive Indexes**: Create indexes on frequently queried columns to speed up data access.
+
+- **Query Optimization**: Write efficient queries, avoiding unnecessary complexity and leveraging built-in functions.
+
+These techniques can significantly enhance the performance and efficiency of Hive queries.  
+
+
 ## Question 9  
 ## Question 10  

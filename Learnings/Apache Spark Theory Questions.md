@@ -194,17 +194,21 @@ This ensures optimal memory use for Spark jobs.
 What are the main advantages of using PySpark over traditional Python for big data processing?  
 A)  
 PySpark, the Python API for Apache Spark, offers several advantages over traditional Python for big data processing. These include:
+Here’s a side-by-side comparison of **PySpark** vs. **traditional Python** for big data processing:
 
-1. **Distributed Computing**: Leverages cluster resources for parallel processing and scalability.
-2. **Performance**: In-memory computation and optimized execution boost speed.
-3. **Ease of Use**: High-level API similar to Pandas simplifies transition for Python users.
-4. **Data Source Compatibility**: Integrates with HDFS, S3, and various data formats.
-5. **Machine Learning & Graph Processing**: Built-in libraries (MLlib, GraphX) facilitate complex analyses.
-6. **Community Support**: Active development within the Apache Spark ecosystem.
-7. **Fault Tolerance**: RDDs ensure data recovery from node failures.
-8. **Unified Processing**: Supports both batch and stream processing with a consistent API.
+| Feature                      | PySpark                               | Traditional Python                   |
+|-------------------------------|---------------------------------------|--------------------------------------|
+| **Data Size**                 | Optimized for **distributed** data processing across clusters, handling petabytes of data | Suitable for **single-node** processing, struggles with large datasets (GBs or more) |
+| **Parallelism**               | **Automatic parallelism** across multiple nodes without manual intervention | Requires **manual multithreading** or multiprocessing for parallelism, limited scalability |
+| **Execution Engine**          | Uses **Spark’s distributed computing engine**, enabling fast in-memory processing | Depends on standard Python execution, slower, and typically bound to single machine resources |
+| **Fault Tolerance**           | Built-in **fault tolerance** with automatic data recovery via RDDs (Resilient Distributed Datasets) | No built-in fault tolerance, requires additional libraries or manual handling |
+| **Cluster Support**           | Seamless integration with distributed systems like **Hadoop, YARN, Kubernetes** | Limited to single-machine processing, requires external tools for cluster support |
+| **Data Sources**              | Supports a variety of **distributed data sources** (HDFS, S3, etc.) out of the box | Primarily focused on local or cloud-based file systems like CSV, JSON |
+| **Performance**               | **In-memory computation** with caching for faster iterative processing | **Disk-based** processing with slower access times, especially for large datasets |
+| **API Flexibility**           | Offers **high-level APIs** for DataFrames, SQL, and MLlib, making it easier for big data manipulation | Lacks built-in support for distributed dataframes and big data manipulation without third-party libraries |
+| **Scalability**               | Easily **scalable** across hundreds or thousands of nodes | Limited scalability, constrained to the hardware of the machine running Python |
 
-These features make PySpark a powerful choice for handling large datasets efficiently. 
+In summary, **PySpark** is ideal for large-scale, distributed data processing, while **traditional Python** is better suited for smaller-scale, single-machine computations.
 
 
 ## Question 11  
@@ -633,7 +637,8 @@ df.write.bucketBy(4, "Salary").saveAsTable("bucketed_data")
 
 # This will distribute the data into 4 buckets based on the Salary column.
 
-
+For filtering large datasets: Partitioning is faster.
+For joining large datasets: Bucketing is faster. 
 
 ## Question 27  
 

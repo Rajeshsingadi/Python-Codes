@@ -32,7 +32,7 @@ General questions
 
 [15)Can you describe a project where you developed batch and streaming pipelines using SQL, Spark, Python, and PySpark? What challenges did you face, and how did you optimize performance?](#question-15)  
 [16)How do you approach optimizing SQL and PySpark code for performance in large-scale distributed systems?](#question-16)  
-[17)?](#question-17)  
+[17)How have you used Airflow to create and manage automated workflows? Can you describe how you handle dependencies and error recovery in Airflow DAGs?](#question-17)  
 [18)?](#question-18)  
 [19)?](#question-19)  
 [20)?](#question-20)  
@@ -578,6 +578,31 @@ These optimizations significantly reduce execution time and resource consumption
 
 
 ## Question 17  
+How have you used Airflow to create and manage automated workflows? Can you describe how you handle dependencies and error recovery in Airflow DAGs?  
+A)  
+Here's a breakdown of the key management and services used in GCP to ensure data security and compliance:
+
+### 1. **Data Encryption**:
+   - **Google Cloud Key Management (KMS)**: Manage encryption keys for services like Cloud Storage and BigQuery. Supports both Google-managed and customer-managed keys.
+
+### 2. **Identity and Access Management (IAM)**:
+   - **Cloud IAM**: Manage roles and permissions for users and service accounts, enforcing the principle of least privilege to control access to resources securely.
+
+### 3. **Auditing and Monitoring**:
+   - **Audit Logs in Cloud Logging**: Track and log actions taken on resources, providing visibility into user activity. Access to these logs is controlled through IAM.
+
+### 4. **Compliance**:
+   - **Compliance Manager and Cloud Compliance**: Manage compliance requirements and audits effectively, ensuring alignment with regulations like GDPR and HIPAA.
+
+### 5. **Multi-factor Authentication (MFA)**:
+   - **Google Account Security Settings**: Enforce MFA for accounts, where users manage their own MFA devices (e.g., Google Authenticator).
+
+### 6. **Network Security**:
+   - **VPC Firewall Rules**: Control inbound and outbound traffic to resources within a VPC, with IAM policies managing who can configure firewall settings.
+
+By leveraging these GCP services and key management practices, you can enhance data security and ensure compliance in your cloud environment.  
+
+
 ## Question 18  
 ## Question 19  
 ## Question 20  

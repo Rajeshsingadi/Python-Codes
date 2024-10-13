@@ -19,3 +19,5 @@ df_joined = df_file1.join(broadcast(df_file2), on="Id", how="inner")
 df_final = df_joined.withColumn("status", lit("a"))
 
 df_final.write.mode("overwrite").saveAsTable("employee_data_hive")
+
+spark.stop()
