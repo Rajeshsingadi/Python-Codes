@@ -12,22 +12,22 @@ Find indices of two numbers that add up to a target? Input: numbers = [2,7,11,15
 A)  
 numbers = [2,7,11,15]
 target = 9
-
-def func(numbers, target):
-    indexDict ={}
-    for index, num in enumerate(numbers):
-        c = target - num
-        if c in indexDict:
-            return [indexDict[c] + 1, index + 1 ]
-        indexDict[num] = index
-    return []
-
+```
+def func(numbers, target):  
+    indexDict ={}  
+    for index, num in enumerate(numbers):  
+        c = target - num  
+        if c in indexDict:  
+            return [indexDict[c] + 1, index + 1 ]  
+        indexDict[num] = index  
+    return []  
 print(func(numbers, target))
 
-
+```
 ## Question 2  
 Find numbers in a table that are equal to both their previous and next values?
 A)  
+```
 with logsTable as (
   select id, num, LEAD(num) over(order by Id) as next_num, 
   LAG(num) over(order by Id) as prev_num 
@@ -36,7 +36,7 @@ with logsTable as (
 select num 
 from logsTable 
 where num = prev_num and num = next_num
-
+```
 Output :  
 RunCount: 1
 
