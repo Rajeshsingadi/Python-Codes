@@ -158,7 +158,32 @@ Overall, PySpark has been instrumental in my work on big data projects, and I am
 
 ### **11. Describe your experience with ETL tooling and automation.**
 **Answer**:  
-"I have extensive experience in building and automating ETL pipelines using a variety of tools and services. For example, in my work with Adani ports, I utilized AWS Glue to orchestrate ETL jobs that extracted data from multiple sources, transformed it using Python and PySpark, and loaded it into AWS RDS. In addition, I have automated ETL processes using Python scripts for data extraction, transformation, and validation in projects like the post-Brexit regulatory reporting at Goldman Sachs. These scripts were integrated with AWS Lambda for event-driven execution, ensuring smooth automation without manual intervention."
+Certainly! Here’s how I would frame my experience with **ETL tooling and automation** using **GCP services**:
+
+---
+
+### **Describe your experience with ETL tooling and automation using GCP services.**
+**Answer**:  
+
+1. **Data Pipelines with Google Cloud Functions & Google BigQuery**:  
+   In one of my projects, I developed a fully automated ETL pipeline that used **Google Cloud Functions** for event-driven data ingestion. These Cloud Functions were triggered whenever new files were uploaded to **Google Cloud Storage** (GCS). The data was pre-processed using **Python** and **PySpark**, and then loaded into **Google BigQuery** for further analysis. This process was automated to ensure minimal manual intervention, with monitoring and logging handled through **Google Cloud Logging** and **Error Reporting**.
+
+2. **Google Dataproc for PySpark-based Transformation**:  
+   I have leveraged **Google Dataproc** for large-scale data processing using **PySpark**. The pipeline ingested raw data from **Google Cloud Storage**, transformed it within **Dataproc**, and loaded the cleaned and transformed data into **BigQuery**. This setup allowed for automated ETL workflows, scaling based on data size, and provided a cost-effective solution by using cluster autoscaling and **preemptible instances** for cost optimization.
+
+3. **Scheduling with Cloud Scheduler and Dataflow for Data Processing**:  
+   In another project, I used **Cloud Scheduler** to run ETL jobs on a scheduled basis, which would trigger **Google Cloud Dataflow** pipelines for real-time data streaming and transformation. These Dataflow pipelines were responsible for processing high-velocity data streams, performing necessary transformations, and loading the results into **BigQuery**. By automating the entire workflow, I ensured that the data was always available for analytics in near-real-time, without manual intervention.
+
+4. **Data Quality and Validation with Google Pub/Sub & Cloud Functions**:  
+   I set up a system where **Google Pub/Sub** would capture data validation events, and **Cloud Functions** would automatically trigger validation processes whenever new data was ingested into **Cloud Storage**. These **Python**-based validation scripts ensured the data met quality standards before loading it into **BigQuery**. Automated error handling and retry logic were in place to ensure data integrity throughout the pipeline.
+
+5. **Monitoring and Alerts using Stackdriver**:  
+   To ensure smooth operation of the ETL pipelines, I integrated **Stackdriver Monitoring** and **Alerts** for real-time visibility and troubleshooting. Any pipeline failures or performance issues would automatically trigger alerts, allowing the team to respond proactively.
+
+---
+
+This approach allowed me to build efficient, scalable, and automated ETL workflows using **GCP services**, ensuring that data was processed and made available in **BigQuery** for analytics, with minimal manual involvement."
+
 
 ---
 ## Question 12  
