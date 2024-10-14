@@ -1,5 +1,6 @@
 Questions
 -----------------
+[0)Have you worked with PySpark before? Can you talk about your experience and expertise working with PySpark?](#question-0)
 
 [1)How have you utilized PySpark for data processing? ](#question-1)  
 [2)Can you give an example of a complex data manipulation task you've handled with SQL? ](#question-2)  
@@ -21,6 +22,30 @@ Questions
 [18)How do you use GIT for version control in data engineering projects?](#question-18)  
 [19)How have you integrated GIT with CI/CD pipelines?](#question-19)  
 [20)How do you approach designing scalable and efficient data models?](#question-20)  
+
+
+## Question 0   
+Have you worked with PySpark before? Can you talk about your experience and expertise working with PySpark?  
+A)  
+**Answer:**
+
+Yes, I have extensive experience working with PySpark, particularly in the context of big data processing and optimizing data pipelines. Over the years, I have applied PySpark in several projects, including:
+
+1. **Adani Ports Project**: I developed a robust data pipeline using PySpark to process and transform port-related data before loading it into AWS RDS. This project involved handling large datasets efficiently, and I optimized the data processing workflow by using caching, persisting data, and partitioning large datasets to improve performance and reduce execution time. PySpark’s distributed processing capabilities were crucial in reducing the runtime of our data jobs.
+
+2. **Maruti Suzuki Project**: In this project, I converted existing Pandas scripts to PySpark to scale out our data processing. By leveraging PySpark’s distributed computation, we were able to significantly reduce the runtime by 10-15 minutes per pipeline. I also optimized the pipeline using techniques like caching and broadcast joins to speed up the data transformations.
+
+3. **Post-Brexit Regulatory Reporting for Goldman Sachs**: I used PySpark to process large datasets from ROETM and FODC, which involved cleaning, filtering, and transforming the data before submitting it to regulators such as FCA and BaFin. I applied PySpark’s powerful DataFrame API to handle complex transformations, and I optimized joins using techniques like broadcast joins and predicate pushdown to ensure faster execution.
+
+Throughout these projects, I leveraged PySpark’s DataFrame API to write scalable, high-performance code for ETL pipelines, focusing on:
+- **Performance optimization**: By carefully tuning parameters, caching, and using efficient join strategies, I improved the speed of PySpark jobs, particularly when dealing with large datasets.
+- **Data transformations**: I frequently used PySpark’s built-in functions for data wrangling, such as filtering, aggregating, and joining large datasets.
+- **Parallel processing**: I leveraged PySpark’s ability to process data in parallel across distributed clusters, reducing the time required to complete complex data transformations.
+
+My expertise with PySpark also extends to working with **AWS Glue**, where I wrote PySpark jobs to process and transform large amounts of data. Additionally, I have used **GCP's Dataproc** in PySpark for running data processing pipelines, ensuring the efficiency of big data processing tasks. 
+
+Overall, PySpark has been instrumental in my work on big data projects, and I am very comfortable optimizing and troubleshooting large-scale data processing using PySpark.  
+
 
 ## Question 1   
 
