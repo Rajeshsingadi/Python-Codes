@@ -27,7 +27,7 @@
 [27)What is the Delta Lake?](#question-27)  
 [28)Give me a ETL pipelines from GCP and AWS architecture and tools we use to create them ?](#question-28)  
 [29)Give me ETL process explanation using GCP?](#question-29)  
-[30)Sample question here?](#question-30)  
+[30)how is the data refresh happening in BigQuery if you are working in a banking company you should submit the trade data to regulator and receive the response back to BigQuery how do you handle this scenario?](#question-30)  
 
 
 
@@ -932,5 +932,117 @@ Now your ETL pipeline code is saved in **GitHub** for future reference and colla
 
 ## Question 30  
 
+how is the data refresh happening in BigQuery if you are working in a banking company you should submit the trade data to regulator and receive the response back to BigQuery how do you handle this scenario?  
+A)  
+To handle the scenario where trade data is submitted to regulators and responses are received back into **BigQuery** in a banking environment, you can implement an automated **data refresh process**. This process ensures that data is consistently updated, synchronized with regulatory submissions, and responses are captured and reflected in BigQuery. Below is a structured approach to achieve this:
 
+### **Scenario Overview**:
+- You are working in a **banking company** that submits **trade data** to a **regulator**.
+- Once the data is submitted, you will receive a response from the regulator.
+- You need to ensure both **submission data** and **responses** are stored and updated in **BigQuery**.
+
+---
+
+### **Solution Approach**:
+
+1. **Data Submission to Regulator**:
+   - Trade data is extracted from a source system (such as a trading system, data lake, or database) and needs to be formatted according to regulatory requirements.
+   - You will likely submit this trade data via a secure API or file transfer system (such as **SFTP** or **REST API**) to the regulator.
+
+2. **Response from Regulator**:
+   - The regulator will respond with a confirmation, validation, or correction file, which must be ingested into **BigQuery**.
+   - The response will either be received as a file (e.g., **CSV**, **JSON**) or via API callbacks.
+
+3. **BigQuery Data Refresh Process**:
+   - Once the response is received, you need to **refresh the data in BigQuery**, updating the status of the trade submissions (e.g., **submitted**, **pending**, **accepted**, **rejected**, etc.) and handling any corrections or modifications requested by the regulator.
+
+---
+
+### **Architecture for Data Refresh in BigQuery**:
+
+1. **Data Ingestion**:
+   - **Initial Trade Data Ingestion**:
+     - The trade data is loaded into **BigQuery** from your source system (e.g., data warehouse, transactional database) using **Google Cloud Dataflow** or **BigQuery Load Jobs**.
+     - This can be triggered either **batch-wise** (at the end of the day) or **real-time** (as trades are executed).
+   
+   - **Response Data Ingestion**:
+     - Responses from the regulator (usually containing status updates, errors, or additional requirements) are ingested into **Google Cloud Storage (GCS)** or **Pub/Sub**.
+     - Use **Google Cloud Functions** or **Dataflow** to process the responses and load them into **BigQuery**.
+   
+2. **Data Transformation and Validation**:
+   - **Data Transformation**: The trade data or the response file may require transformations (e.g., converting data types, normalizing values) before it is loaded into BigQuery.
+   - **Validation**: Ensure that the data adheres to the required schema and check for missing or invalid values. You can implement this using **Apache Beam** in **Dataflow** or lightweight checks in **Cloud Functions**.
+
+3. **Data Refresh**:
+   - **Status Updates**: In BigQuery, you will have a table storing the trade submissions. Once you receive a response from the regulator, you need to update this table with the latest status of the trades.
+   - **Merge Operation**: BigQuery supports **MERGE** statements, allowing you to update, insert, or delete rows based on the incoming data (from the regulator's response).
+
+   Example `MERGE` SQL Query to Update Trade Status:
+   ```sql
+   MERGE INTO `project.dataset.trade_submissions` T
+   USING `project.dataset.regulator_responses` R
+   ON T.trade_id = R.trade_id
+   WHEN MATCHED THEN
+     UPDATE SET T.status = R.status, T.response_date = R.response_date
+   WHEN NOT MATCHED THEN
+     INSERT (trade_id, status, response_date) 
+     VALUES (R.trade_id, R.status, R.response_date);
+   ```
+
+   - This query will update the **status** of existing trades and insert new rows if the trade response from the regulator does not exist in the BigQuery table.
+
+4. **Automation and Orchestration**:
+   - **Google Cloud Composer (Airflow)** can orchestrate the entire pipeline:
+     - Schedule daily or real-time ingestion of trade data.
+     - Trigger loading and processing of response files.
+     - Automate the merging of data into BigQuery.
+   
+   - **Pub/Sub Triggers**: For real-time systems, you can use **Google Pub/Sub** to notify the system when new trade data or response files are available in GCS. This would trigger **Google Cloud Functions** or **Cloud Dataflow** to process and load the data into BigQuery.
+
+5. **Handling Errors and Corrections**:
+   - If the regulator rejects a trade or requires a correction, you can use a combination of **BigQuery**, **Pub/Sub**, and **Cloud Functions** to notify the relevant teams or systems. This could also trigger automated corrections or re-submissions, depending on the business rules.
+   
+   Example: If the trade submission is rejected, an alert can be generated using **Cloud Monitoring**, and **Cloud Functions** can update the trade status in BigQuery with an error code or reason provided by the regulator.
+
+---
+
+### **Flow Diagram for Trade Data Submission and Response Handling in GCP**:
+
+1. **Ingestion**:
+   - **Source System** → **Google Cloud Storage (GCS)** / **Pub/Sub** (for real-time data).
+
+2. **Transformation and Submission**:
+   - **Cloud Dataflow** for data transformation → **Trade Submission** to the regulator (via API or file transfer).
+
+3. **Response Handling**:
+   - **Regulator Response** → **GCS** / **Pub/Sub** → **Cloud Functions** or **Dataflow** for ingestion into **BigQuery**.
+
+4. **Data Refresh in BigQuery**:
+   - **Merge** trade status data into **BigQuery** tables with **MERGE SQL** statements.
+
+---
+
+### **Example Workflow**:
+
+1. **Initial Trade Data** is uploaded to **GCS** or **BigQuery** via **Dataflow**.
+2. The **trade data** is submitted to the **regulator** (via API or SFTP).
+3. **Response files** are placed in **GCS** by the regulator, or responses are received via API and stored in **BigQuery**.
+4. A **Cloud Function** or **Dataflow** job processes the response, performs transformations, and updates the trade status in BigQuery.
+5. **Google Cloud Composer (Airflow)** schedules this pipeline, ensuring daily trade submissions are sent, responses are handled, and data in **BigQuery** is refreshed.
+
+---
+
+### **Security and Governance**:
+- **Google IAM**: Ensure that only authorized users and services have access to trade data and the BigQuery dataset.
+- **Google Cloud KMS**: Encrypt sensitive trade data in **GCS** and **BigQuery**.
+- **Google Data Catalog**: Use for tracking metadata and ensuring governance over trade data.
+
+---
+
+### **Cost Optimization**:
+- Use **BigQuery's cost optimization tools** (such as clustering, partitioning, and query caching) to minimize the cost of storing and querying large datasets.
+- Enable **logging and monitoring** to track the costs associated with the ETL pipeline.
+
+### **Conclusion**:
+By implementing a robust pipeline that automates the submission of trade data to the regulator and handles responses using **Google Cloud** services like **BigQuery**, **Dataflow**, **Cloud Functions**, and **Cloud Composer**, you ensure efficient, real-time data synchronization and status tracking. The pipeline can scale with your business needs, and by using services like **IAM** and **KMS**, you can also maintain the necessary security and compliance.
 
