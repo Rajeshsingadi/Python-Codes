@@ -25,7 +25,7 @@
 [25)Difference between datalake, datawarehouse and datalake?](#question-25)  
 [26)What is the difference between partitioning and bucketing?](#question-26)  
 [27)What is the Delta Lake?](#question-27)  
-[28)Sample question here?](#question-28)  
+[28)Give me a ETL pipelines from GCP and AWS architecture and tools we use to create them ?](#question-28)  
 [29)Sample question here?](#question-29)  
 [30)Sample question here?](#question-30)  
 
@@ -658,6 +658,56 @@ It solves common data lake challenges like data corruption and supports large-sc
 
 
 ## Question 28  
+Give me a ETL pipelines from GCP and AWS architecture and tools we use to create them ?  
+A)  
+Here’s a side-by-side comparison of ETL pipelines in **GCP (Google Cloud Platform)** and **AWS (Amazon Web Services)**, including the architecture and tools typically used for each platform.
+
+| **ETL Pipeline Stage**     | **GCP Architecture and Tools** | **AWS Architecture and Tools** |
+|----------------------------|-------------------------------|-------------------------------|
+| **1. Data Ingestion**       | **GCP Tools**:                | **AWS Tools**:                |
+|                            | - **Google Cloud Storage (GCS)** for unstructured data (files, logs). | - **Amazon S3** for unstructured data storage (files, logs). |
+|                            | - **Google Pub/Sub** for real-time streaming data ingestion. | - **Amazon Kinesis** for real-time streaming data ingestion. |
+|                            | - **Transfer Appliance** for large data migrations. | - **AWS Snowball** for bulk data migration. |
+|                            | - **BigQuery Data Transfer Service** for SaaS app data loading. | - **AWS DataSync** for transferring large data. |
+| **2. Data Transformation**  | **GCP Tools**:                | **AWS Tools**:                |
+|                            | - **Google Cloud Dataflow** (managed Apache Beam service) for batch and real-time data transformation and streaming. | - **AWS Glue** (serverless ETL service) for batch and real-time data transformation using Spark. |
+|                            | - **Google Dataproc** (managed Apache Hadoop and Spark) for batch processing of big data. | - **Amazon EMR** (Elastic MapReduce) for managed Hadoop, Spark, and other big data frameworks. |
+|                            | - **BigQuery SQL** for lightweight SQL-based transformation. | - **AWS Lambda** for event-driven transformation and lightweight ETL tasks. |
+|                            | - **Google Cloud Functions** for lightweight ETL transformation (serverless). | - **AWS Glue Python Shell** for running lightweight Python scripts. |
+| **3. Data Storage**         | **GCP Tools**:                | **AWS Tools**:                |
+|                            | - **Google BigQuery** for data warehousing and analytical storage (serverless, highly scalable). | - **Amazon Redshift** for data warehousing and analytical storage. |
+|                            | - **Google Cloud Storage** (GCS) for object storage. | - **Amazon S3** for object storage. |
+|                            | - **Google Cloud SQL** for relational databases (MySQL/PostgreSQL). | - **Amazon RDS** for relational databases (MySQL/PostgreSQL/Oracle). |
+|                            | - **Google Spanner** for globally distributed SQL databases. | - **Amazon Aurora** for relational databases. |
+| **4. Data Orchestration**   | **GCP Tools**:                | **AWS Tools**:                |
+|                            | - **Google Cloud Composer** (managed Apache Airflow) for orchestrating complex ETL workflows. | - **AWS Step Functions** for orchestrating serverless workflows. |
+|                            | - **Google Cloud Scheduler** for scheduled, recurring ETL tasks (e.g., daily jobs). | - **AWS Glue Workflows** for managing and orchestrating ETL jobs in Glue. |
+|                            | - **Apache Airflow** on Google Dataproc for custom orchestration. | - **Amazon Managed Workflows for Apache Airflow (MWAA)** for ETL orchestration. |
+| **5. Data Loading**         | **GCP Tools**:                | **AWS Tools**:                |
+|                            | - **BigQuery Load Jobs** for loading data into the BigQuery warehouse (serverless). | - **Redshift COPY Command** for loading data into Amazon Redshift. |
+|                            | - **Google Cloud Dataflow** for streaming and batch loading into BigQuery and Cloud Storage. | - **AWS Glue Jobs** for loading data into various destinations (e.g., Redshift, S3). |
+|                            | - **Google Cloud Functions** for event-driven loading. | - **Amazon Kinesis Firehose** for streaming data directly into destinations like S3 and Redshift. |
+| **6. Data Governance & Security** | **GCP Tools**:            | **AWS Tools**:                |
+|                            | - **Google Identity and Access Management (IAM)** for access control. | - **AWS Identity and Access Management (IAM)** for access control. |
+|                            | - **Google Data Catalog** for metadata management and governance. | - **AWS Glue Data Catalog** for metadata management and governance. |
+|                            | - **Google Cloud KMS** for data encryption and key management. | - **AWS Key Management Service (KMS)** for data encryption and key management. |
+|                            | - **VPC Service Controls** for securing data access. | - **AWS VPC** and **AWS Security Groups** for securing network access. |
+| **7. Monitoring & Logging** | **GCP Tools**:                | **AWS Tools**:                |
+|                            | - **Google Cloud Logging** and **Cloud Monitoring** for logging and monitoring ETL pipelines. | - **Amazon CloudWatch** for monitoring and logging ETL pipelines. |
+|                            | - **Google Stackdriver** for performance monitoring, alerts, and troubleshooting. | - **AWS X-Ray** for tracing and debugging ETL workflows. |
+| **8. Cost Management**      | **GCP Tools**:                | **AWS Tools**:                |
+|                            | - **Google Cloud Cost Management** for tracking, monitoring, and optimizing costs. | - **AWS Cost Explorer** and **AWS Budgets** for tracking and optimizing costs. |
+|                            | - **Google Cloud Pricing Calculator** for estimating pipeline costs. | - **AWS Pricing Calculator** for estimating costs. |
+
+---
+
+### **Summary**:
+- **GCP (Google Cloud Platform)** provides tools like **Google Cloud Dataflow**, **BigQuery**, **Google Cloud Functions**, and **Cloud Composer** (Airflow) for creating and managing ETL pipelines, with a strong focus on serverless and real-time data processing.
+  
+- **AWS (Amazon Web Services)** offers tools such as **AWS Glue**, **Redshift**, **S3**, and **Step Functions** for building scalable ETL pipelines, supporting both batch and real-time processing with managed services like Glue and EMR.
+
+Both platforms offer comprehensive solutions for ETL pipelines, but the choice depends on the specific needs of the project, including preferences for serverless, cost, and the scale of data processing required.  
+
 
 ## Question 29  
 
