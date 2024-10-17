@@ -26,7 +26,7 @@
 [26)What is the difference between partitioning and bucketing?](#question-26)  
 [27)What is the Delta Lake?](#question-27)  
 [28)Give me a ETL pipelines from GCP and AWS architecture and tools we use to create them ?](#question-28)  
-[29)Sample question here?](#question-29)  
+[29)Give me ETL process explanation using GCP?](#question-29)  
 [30)Sample question here?](#question-30)  
 
 
@@ -710,6 +710,225 @@ Both platforms offer comprehensive solutions for ETL pipelines, but the choice d
 
 
 ## Question 29  
+Give me ETL process explanation using GCP?
+
+### **ETL Pipeline Architecture (GCP Focused)**
+
+Here is an architecture using **Google Cloud Platform (GCP)** services based on your requirements:
+
+1. **Data Ingestion**:
+   - **Google Cloud Storage (GCS)** for storing unstructured data (e.g., files, logs, etc.).
+   - **Google Pub/Sub** for real-time streaming data ingestion (messages, events).
+
+2. **Data Transformation**:
+   - **Google Cloud Dataflow** for batch and stream processing of data.
+   - **Google Cloud Functions** for lightweight transformation tasks like filtering or event-triggered operations.
+
+3. **Data Storage**:
+   - **Google BigQuery** for scalable and fast analytical storage (data warehouse).
+
+4. **Data Orchestration**:
+   - **Google Cloud Composer** (managed Apache Airflow) to manage and schedule ETL workflows.
+
+5. **Data Loading**:
+   - **Google Cloud Functions** to trigger data load jobs into **BigQuery** or **Cloud Storage**.
+
+6. **Data Governance & Security**:
+   - **Google Identity and Access Management (IAM)** for role-based access control.
+   - **Google Data Catalog** for metadata management.
+   - **Google Cloud Key Management Service (KMS)** for encryption of data at rest.
+
+7. **Monitoring & Logging**:
+   - **Google Cloud Logging** for logging and monitoring the ETL process.
+
+8. **Cost Management**:
+   - Use Google’s built-in cost management tools to track and optimize your pipeline.
+
+---
+
+### **Architecture Diagram**:
+
+```
+[ Google Cloud Storage (GCS) ]
+         |
+         |      (Unstructured Data Ingestion)
+         v
+[ Google Pub/Sub ] -------------------> [ Google Cloud Functions (Lightweight Tasks) ]
+         |                                        |
+         |                                        v
+[ Google Cloud Dataflow (Transformations) ] ----> [ Google BigQuery (Data Warehouse) ]
+         |
+         v
+[ Google Cloud Composer (Orchestration) ]
+```
+
+### **Step-by-Step Guide with Example Code**:
+
+#### **1. Data Ingestion:**
+
+- **Google Cloud Storage**: Store unstructured data like CSV, JSON, or Parquet files.
+  
+  Example Python code to upload a file to GCS:
+  ```python
+  from google.cloud import storage
+
+  def upload_to_gcs(bucket_name, source_file_name, destination_blob_name):
+      storage_client = storage.Client()
+      bucket = storage_client.bucket(bucket_name)
+      blob = bucket.blob(destination_blob_name)
+
+      blob.upload_from_filename(source_file_name)
+
+      print(f"File {source_file_name} uploaded to {destination_blob_name}.")
+
+  upload_to_gcs('my-bucket', 'local-data.csv', 'data/input/local-data.csv')
+  ```
+
+- **Google Pub/Sub**: Push messages for real-time processing.
+  
+  Example Python code to publish a message:
+  ```python
+  from google.cloud import pubsub_v1
+
+  def publish_message(project_id, topic_id, message):
+      publisher = pubsub_v1.PublisherClient()
+      topic_path = publisher.topic_path(project_id, topic_id)
+
+      data = message.encode("utf-8")
+      future = publisher.publish(topic_path, data)
+      print(f"Published message ID: {future.result()}")
+
+  publish_message('my-project', 'my-topic', 'This is a sample message.')
+  ```
+
+#### **2. Data Transformation:**
+
+- **Google Cloud Dataflow**: Perform large-scale data transformations.
+  
+  Example code using Apache Beam (used by Dataflow):
+  ```python
+  import apache_beam as beam
+  from apache_beam.options.pipeline_options import PipelineOptions
+
+  def run_dataflow_pipeline(input_file, output_file):
+      options = PipelineOptions()
+      with beam.Pipeline(options=options) as p:
+          (p
+           | 'Read from GCS' >> beam.io.ReadFromText(input_file)
+           | 'Transform' >> beam.Map(lambda x: x.upper())
+           | 'Write to GCS' >> beam.io.WriteToText(output_file))
+
+  run_dataflow_pipeline('gs://my-bucket/input.txt', 'gs://my-bucket/output.txt')
+  ```
+
+- **Google Cloud Functions**: Perform lightweight, event-driven tasks (triggering on file uploads to GCS).
+  
+  Example Python Cloud Function to trigger on file upload:
+  ```python
+  import os
+  from google.cloud import storage
+
+  def process_file(event, context):
+      bucket_name = event['bucket']
+      file_name = event['name']
+
+      print(f"Processing file {file_name} in bucket {bucket_name}")
+  ```
+
+#### **3. Data Loading (BigQuery)**:
+
+Use **Google Cloud Functions** or **Dataflow** to load data into **BigQuery**.
+
+Example code to load CSV into BigQuery:
+```python
+from google.cloud import bigquery
+
+def load_csv_to_bigquery(dataset_id, table_id, source_uri):
+    client = bigquery.Client()
+    dataset_ref = client.dataset(dataset_id)
+    table_ref = dataset_ref.table(table_id)
+
+    job_config = bigquery.LoadJobConfig(
+        source_format=bigquery.SourceFormat.CSV, skip_leading_rows=1, autodetect=True)
+
+    load_job = client.load_table_from_uri(source_uri, table_ref, job_config=job_config)
+    print(f"Starting job {load_job.job_id}")
+    load_job.result()  # Wait for the job to complete.
+
+    print(f"Loaded {client.get_table(table_ref).num_rows} rows to {table_id}")
+```
+
+#### **4. Data Orchestration (Cloud Composer)**:
+
+Orchestrate the entire ETL process using **Apache Airflow** in **Google Cloud Composer**.
+
+Example Airflow DAG:
+```python
+from airflow import DAG
+from airflow.operators.bash_operator import BashOperator
+from airflow.utils.dates import days_ago
+
+dag = DAG('etl_pipeline', start_date=days_ago(1), schedule_interval='@daily')
+
+start_task = BashOperator(
+    task_id='start_etl',
+    bash_command='echo "Starting ETL process..."',
+    dag=dag)
+
+end_task = BashOperator(
+    task_id='end_etl',
+    bash_command='echo "ETL process completed."',
+    dag=dag)
+
+start_task >> end_task
+```
+
+#### **5. Data Governance & Security**:
+
+- **IAM**: Use **Google Identity and Access Management** to control access to GCP resources.
+- **Data Catalog**: Use **Google Data Catalog** for metadata management.
+- **KMS**: Use **Google Cloud KMS** to encrypt data in GCS or BigQuery.
+
+#### **6. Monitoring & Logging (Cloud Logging)**:
+
+Log all events and errors in **Google Cloud Logging** to monitor pipeline health.
+
+Example:
+```python
+import logging
+logging.basicConfig(level=logging.INFO)
+logging.info("ETL process started.")
+```
+
+---
+
+### **Saving the Code to GitHub:**
+
+1. **Initialize a Git repository** in your project directory:
+   ```bash
+   git init
+   ```
+
+2. **Add all files** (your ETL scripts, Cloud Functions, Airflow DAGs, etc.) to the Git repository:
+   ```bash
+   git add .
+   ```
+
+3. **Commit the files** to the repository:
+   ```bash
+   git commit -m "Initial commit for GCP ETL pipeline"
+   ```
+
+4. **Push the code** to a GitHub repository:
+   - First, create a repository in GitHub.
+   - Then, run the following commands:
+   ```bash
+   git remote add origin https://github.com/your-username/your-repository.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+Now your ETL pipeline code is saved in **GitHub** for future reference and collaboration. You can also use **GitHub Actions** for automated CI/CD to deploy Cloud Functions and other resources.
 
 ## Question 30  
 
