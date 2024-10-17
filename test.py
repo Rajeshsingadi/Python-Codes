@@ -1,27 +1,22 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf, length, regexp_replace, col
-from pyspark.sql.types import StringType
 
-spark = SparkSession.builder.appName("Comma Seperated Max").getOrCreate()
+# Step 1: Create a SparkSession (this is the entry point to use PySpark)
+spark = SparkSession.builder.appName("LineWordCount").getOrCreate()
 
+# Step 2: Read the text file
+file_path = "path/to/your/textfile.txt"  # Replace with the path to your file
+lines_rdd = spark.sparkContext.textFile(file_path)
 
-data = [
-    ("Alice", "Python,SQL,Java"),
-    ("Bob", "Python"),
-    ("Charlie", "Python,SQL,Java,Scala"),
-    ("David", "Python,SQL"),
-    ("Eve", "Python,SQL,Java,C++"),
-    ("Frank", "SQL,Java")
-]
+# Step 3: Count the number of words in each line
+# We split each line by spaces and then count the length of the resulting list (number of words)
+word_counts_per_line = lines_rdd.map(lambda line: (line, len(line.split())))
 
-columns = ["name", "skills"]
+# Step 4: Collect the results (bring data to the driver node) and print
+results = word_counts_per_line.collect()
 
-df = spark.createDataFrame(data,columns)
+# Step 5: Print the results (each line and its word count)
+for line, count in results:
+    print(f"Line: '{line}' has {count} words")
 
-
-df_skill = df.withColumn("SkillCount", length(col("skills")) - length(regexp_replace(col("skills"), ",", "")) +1 )
-
-max_skill_count = df_skill.agg({"SkillCount":"max"} ).collect()[0][0]
-result = df_skill.filter(col("SkillCount")==max_skill_count)
-
-result.show()
+# Step 6: Stop the Spark session when done
+spark.stop()
