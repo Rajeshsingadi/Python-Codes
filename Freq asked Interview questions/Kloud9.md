@@ -1,4 +1,4 @@
-Questions
+L1 Questions
 -----------------
 
 [1)Find indices of two numbers that add up to a target? Input: numbers = [2,7,11,15], target = 9?](#question-1)  

@@ -103,6 +103,7 @@ delete duplicates from employee table
  1		akash 		101		500		2
 
 A)  
+```
 WITH ranked_employees AS (
     SELECT 
         emp_id,
@@ -117,7 +118,7 @@ DELETE FROM employee
 WHERE emp_id IN (
     SELECT emp_id FROM ranked_employees WHERE row_num > 1
 );
-
+```
 6)  
 ### Question:
 Given the following tables:
