@@ -865,8 +865,9 @@ FROM `project.dataset.segments_external`;
 * **Latency:** 15–20 minutes — a practical near-real-time sweet spot
 
 
-## Question 20  
-The Data Lake Cataloging Challenge (Tests Data Lake, Metadata, and Proactiveness)
+# Question 20  
+
+The Data Lake Cataloging Challenge (Tests Data Lake, Metadata, and Proactiveness)  
 Scenario:  
 We have a Google Cloud Storage (GCS) Data Lake that receives raw, unstructured JSON logs from various microservices. Data scientists are complaining they can't find relevant tables, and when they do, they don't trust the data quality. We need to "catalog" this data and make it queryable in BigQuery, using dbt to clean it.  
 Question:  
