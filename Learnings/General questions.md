@@ -30,12 +30,24 @@ General questions
 
 [14)How do you handle **version control** and changes in data pipeline code or configurations?](#question-14)  
 
-[15)Can you describe a project where you developed batch and streaming pipelines using SQL, Spark, Python, and PySpark? What challenges did you face, and how did you optimize performance?](#question-15)  
+[15)Can you describe a project where you developed batch and streaming pipelines using SQL, Spark, Python, and PySpark? What challenges did you face, and how did you optimize performance?](#question-15)    
+
 [16)How do you approach optimizing SQL and PySpark code for performance in large-scale distributed systems?](#question-16)  
+
 [17)How have you used Airflow to create and manage automated workflows? Can you describe how you handle dependencies and error recovery in Airflow DAGs?](#question-17)  
+
 [18)Have you used Databricks or EMR in your projects? How did you manage and optimize Spark jobs in these environments?](#question-18)  
+
 [19)Design a high-level architecture to make the Snowflake customer segmentation available in BigQuery with < 30-minute latency. Explain your choice of transfer mechanism, how you would handle schema evolution, and where you would position your dbt code in this architecture. What are the cost and performance trade-offs of your approach?](#question-19)  
-[20)?](#question-20)  
+
+[20)The Data Lake Cataloging Challenge (Tests Data Lake, Metadata, and Proactiveness)
+
+Scenario:
+We have a Google Cloud Storage (GCS) Data Lake that receives raw, unstructured JSON logs from various microservices. Data scientists are complaining they can't find relevant tables, and when they do, they don't trust the data quality. We need to "catalog" this data and make it queryable in BigQuery, using dbt to clean it.
+
+Question:
+"Walk me through your process for onboarding a new, unfamiliar JSON log file from this Data Lake. How would you inspect it, define its schema for BigQuery, and create a trusted, documented dbt model for the data scientists? How would you automate the 'cataloging' (metadata management) so this doesn't become a manual bottleneck?](#question-20)  
+
 [21)?](#question-21)  
 [22)?](#question-22)  
 [23)?](#question-23)  
