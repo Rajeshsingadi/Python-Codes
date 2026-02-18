@@ -46,7 +46,12 @@ We have a Google Cloud Storage (GCS) Data Lake that receives raw, unstructured J
 Question:  
 Walk me through your process for onboarding a new, unfamiliar JSON log file from this Data Lake. How would you inspect it, define its schema for BigQuery, and create a trusted, documented dbt model for the data scientists? How would you automate the 'cataloging' (metadata management) so this doesn't become a manual bottleneck?](#question-20)  
 
-[21)?](#question-21)  
+[21)The Cost/Performance Optimization  
+Scenario:  
+A dbt model joining 50M sales rows with 10M customer rows is running slowly and consuming high slots in BigQuery (or scaling warehouses in Snowflake), spiking costs. The business needs this refreshed hourly.  
+
+Question:  
+How would you diagnose and resolve this issue? Explain your specific steps in both BigQuery and Snowflake contexts?](#question-21)  
 [22)?](#question-22)  
 [23)?](#question-23)  
 [24)?](#question-24)  
@@ -869,7 +874,7 @@ Walk me through your process for onboarding a new, unfamiliar JSON log file from
 A)  
 ---
 
-# Onboarding a New JSON Log File from GCS Data Lake
+## Onboarding a New JSON Log File from GCS Data Lake
 
 When dealing with unfamiliar JSON logs in a data lake, my goal is to **understand, structure, validate, and automate** — avoiding manual and error-prone processes.
 
@@ -965,3 +970,126 @@ This process converts a raw data lake into a **searchable, validated, and truste
 * Scalable onboarding of new sources
 
 ---
+
+## Question 21  
+The Cost/Performance Optimization  
+Scenario:  
+A dbt model joining 50M sales rows with 10M customer rows is running slowly and consuming high slots in BigQuery (or scaling warehouses in Snowflake), spiking costs. The business needs this refreshed hourly.  
+
+Question:  
+How would you diagnose and resolve this issue? Explain your specific steps in both BigQuery and Snowflake contexts?
+A)  
+---
+When a large dbt model joining tens of millions of rows runs slowly and drives up costs, I approach the problem systematically — focusing on **diagnosis first, optimization second**.
+
+### **Step 1: Identify the Bottleneck**
+
+I start by inspecting the query execution details rather than guessing.
+
+In BigQuery, I review:
+
+* Execution graph & stage breakdown
+* Slot consumption and skew
+* Bytes processed vs output rows
+
+In Snowflake, I check:
+
+* Query profile & operator costs
+* Partition pruning effectiveness
+* Spill to remote storage
+
+This tells me whether the issue is caused by **scans, joins, shuffles, or skew**.
+
+---
+
+### **Step 2: Reduce Data Scanned**
+
+Large joins often become expensive because too much data is read.
+
+Common fixes:
+
+* Ensure **partition pruning** works (filter on partition columns)
+* Avoid `SELECT *` — project only needed columns
+* Push filters as early as possible
+
+For hourly refreshes, I strongly prefer **incremental models** instead of full rebuilds.
+
+---
+
+### **Step 3: Optimize Join Strategy**
+
+With large tables, join efficiency is critical.
+
+In BigQuery:
+
+* Cluster tables on join keys (e.g., `customer_id`)
+* Verify join distribution and shuffle behavior
+* Pre-aggregate or deduplicate before join
+
+In Snowflake:
+
+* Validate micro-partition pruning
+* Use clustering keys if pruning is poor
+* Avoid unnecessary repartitioning
+
+If one dataset is logically smaller after filtering, I ensure the optimizer can exploit that.
+
+---
+
+### **Step 4: Precompute & Simplify**
+
+If the same heavy joins run hourly, I reduce repeated work:
+
+* Break complex logic into staged models
+* Materialize intermediate results
+* Use table materialization instead of views where beneficial
+
+This stabilizes performance and lowers compute spikes.
+
+---
+
+### **Step 5: Validate Cost Drivers**
+
+In BigQuery, high cost usually means excessive **bytes processed or shuffle volume**.
+In Snowflake, cost spikes often indicate **warehouse scaling or spilling**.
+
+I confirm that improvements actually reduce:
+
+* Data scanned
+* Shuffle / repartition overhead
+* Compute time
+
+---
+
+### **Final Strategy**
+
+For an hourly SLA, my preferred solution is:
+
+* Incremental processing
+* Proper partitioning & clustering
+* Lean projections & early filters
+* Materialized intermediate layers
+
+This balances performance, predictability, and cost.
+
+---
+
+## Question 22  
+A)  
+
+## Question 23  
+A)  
+## Question 24  
+A)  
+## Question 25  
+A)  
+## Question 26  
+A)  
+## Question 27  
+A)  
+## Question 28  
+A)  
+## Question 29
+A)  
+## Question 30    
+A)  
