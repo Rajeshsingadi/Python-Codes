@@ -36,7 +36,16 @@ General questions
 [18)Have you used Databricks or EMR in your projects? How did you manage and optimize Spark jobs in these environments?](#question-18)  
 [19)Design a high-level architecture to make the Snowflake customer segmentation available in BigQuery with < 30-minute latency. Explain your choice of transfer mechanism, how you would handle schema evolution, and where you would position your dbt code in this architecture. What are the cost and performance trade-offs of your approach?](#question-19)  
 [20)?](#question-20)  
-
+[21)?](#question-21)  
+[22)?](#question-22)  
+[23)?](#question-23)  
+[24)?](#question-24)  
+[25)?](#question-25)  
+[26)?](#question-26)  
+[27)?](#question-27)  
+[28)?](#question-28)  
+[29)?](#question-29)  
+[30)?](#question-30)  
 
 
 
@@ -662,11 +671,9 @@ Our marketing team currently runs customer segmentation in Snowflake, but our pr
 
 Design a high-level architecture to make the Snowflake customer segmentation available in BigQuery with < 30-minute latency. Explain your choice of transfer mechanism, how you would handle schema evolution, and where you would position your dbt code in this architecture. What are the cost and performance trade-offs of your approach?  
 A)  
-Here is your content rewritten into clean, readable Markdown:
-
 ---
 
-# Architecture Overview
+## Architecture Overview
 
 I would design a **hybrid architecture** that preserves the existing Snowflake investment while enabling near real-time analytics in BigQuery.
 
