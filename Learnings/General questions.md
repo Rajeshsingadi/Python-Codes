@@ -861,3 +861,107 @@ FROM `project.dataset.segments_external`;
 
 
 ## Question 20  
+The Data Lake Cataloging Challenge (Tests Data Lake, Metadata, and Proactiveness)
+Scenario:  
+We have a Google Cloud Storage (GCS) Data Lake that receives raw, unstructured JSON logs from various microservices. Data scientists are complaining they can't find relevant tables, and when they do, they don't trust the data quality. We need to "catalog" this data and make it queryable in BigQuery, using dbt to clean it.  
+Question:  
+Walk me through your process for onboarding a new, unfamiliar JSON log file from this Data Lake. How would you inspect it, define its schema for BigQuery, and create a trusted, documented dbt model for the data scientists? How would you automate the 'cataloging' (metadata management) so this doesn't become a manual bottleneck?  
+A)  
+---
+
+# Onboarding a New JSON Log File from GCS Data Lake
+
+When dealing with unfamiliar JSON logs in a data lake, my goal is to **understand, structure, validate, and automate** — avoiding manual and error-prone processes.
+
+---
+
+## **1. Discovery & Inspection**
+
+I begin by sampling a small subset of files across different time ranges rather than scanning the entire dataset.
+
+Key checks:
+
+* Identify available fields and nesting depth
+* Measure field presence & null rates
+* Detect type inconsistencies
+* Look for schema evolution patterns
+
+For quick analysis, I use a **BigQuery external table over sample files**.
+
+---
+
+## **2. Schema Design Strategy**
+
+Based on observed patterns, I choose an appropriate schema approach:
+
+**Stable Structure → Fixed Schema**
+
+* Map JSON fields to typed BigQuery columns
+* Preserve nested objects as RECORD types
+
+**Evolving / Sparse Structure → Hybrid Schema**
+
+* Extract core analytical fields
+* Retain full payload as JSON for flexibility
+
+This ensures performance without losing adaptability.
+
+---
+
+## **3. BigQuery Onboarding**
+
+* Create **external or staging tables** on GCS JSON
+* Use SAFE parsing & casting to prevent pipeline failures
+* Add metadata fields (file name, ingestion time)
+
+---
+
+## **4. dbt Model for Trusted Data**
+
+In dbt, I standardize and validate the data:
+
+* Clean & normalize field names
+* Parse timestamps safely
+* Add quality indicators & validation rules
+* Filter or flag invalid records
+
+I also define **tests** (`not_null`, `accepted_values`, freshness checks).
+
+---
+
+## **5. Documentation & Trust**
+
+Every dbt model includes:
+
+* Clear business description
+* Column-level definitions
+* Usage guidance for analysts
+* Explicit quality expectations
+
+This builds confidence for data scientists.
+
+---
+
+## **6. Automation & Cataloging**
+
+To prevent manual bottlenecks:
+
+* Trigger **Cloud Functions on new GCS files**
+* Auto-infer schema using sampling
+* Create/update BigQuery tables automatically
+* Register metadata in Data Catalog
+* Generate dbt model templates
+
+Additionally, implement **schema drift detection** and alerts.
+
+---
+
+## **Outcome**
+
+This process converts a raw data lake into a **searchable, validated, and trusted analytics layer**, enabling:
+
+* Reliable BigQuery querying
+* Self-service discovery
+* Scalable onboarding of new sources
+
+---
