@@ -52,8 +52,15 @@ A dbt model joining 50M sales rows with 10M customer rows is running slowly and 
 
 Question:  
 How would you diagnose and resolve this issue? Explain your specific steps in both BigQuery and Snowflake contexts?](#question-21)  
-[22)?](#question-22)  
-[23)?](#question-23)  
+[22)The Real-Time Requirement  
+Scenario:  
+The business wants a real-time dashboard showing user behavior within 5 minutes of the event occurring. Currently, our dbt pipelines run hourly batch jobs.  
+
+Question:  
+How would you modify our GCP architecture to support this 5-minute latency requirement?](#question-22)  
+
+[23)In your previous project, you mentioned using GCS as a storage layer, processing CSV files with Dataflow, and loading the transformed data into BigQuery.  
+What other architectural approaches could you have used? Which design would you consider best, and why? ](#question-23)  
 [24)?](#question-24)  
 [25)?](#question-25)  
 [26)?](#question-26)  
@@ -686,7 +693,7 @@ Our marketing team currently runs customer segmentation in Snowflake, but our pr
 
 Design a high-level architecture to make the Snowflake customer segmentation available in BigQuery with < 30-minute latency. Explain your choice of transfer mechanism, how you would handle schema evolution, and where you would position your dbt code in this architecture. What are the cost and performance trade-offs of your approach?  
 A)  
----
+
 
 ## Architecture Overview
 
@@ -865,7 +872,7 @@ FROM `project.dataset.segments_external`;
 * **Latency:** 15–20 minutes — a practical near-real-time sweet spot
 
 
-# Question 20  
+## Question 20  
 
 The Data Lake Cataloging Challenge (Tests Data Lake, Metadata, and Proactiveness)  
 Scenario:  
@@ -873,7 +880,7 @@ We have a Google Cloud Storage (GCS) Data Lake that receives raw, unstructured J
 Question:  
 Walk me through your process for onboarding a new, unfamiliar JSON log file from this Data Lake. How would you inspect it, define its schema for BigQuery, and create a trusted, documented dbt model for the data scientists? How would you automate the 'cataloging' (metadata management) so this doesn't become a manual bottleneck?  
 A)  
----
+
 
 ## Onboarding a New JSON Log File from GCS Data Lake
 
@@ -978,9 +985,9 @@ Scenario:
 A dbt model joining 50M sales rows with 10M customer rows is running slowly and consuming high slots in BigQuery (or scaling warehouses in Snowflake), spiking costs. The business needs this refreshed hourly.  
 
 Question:  
-How would you diagnose and resolve this issue? Explain your specific steps in both BigQuery and Snowflake contexts?
+How would you diagnose and resolve this issue? Explain your specific steps in both BigQuery and Snowflake contexts?  
 A)  
----
+
 When a large dbt model joining tens of millions of rows runs slowly and drives up costs, I approach the problem systematically — focusing on **diagnosis first, optimization second**.
 
 ### **Step 1: Identify the Bottleneck**
@@ -1076,10 +1083,243 @@ This balances performance, predictability, and cost.
 ---
 
 ## Question 22  
+The Real-Time Requirement  
+Scenario:  
+The business wants a real-time dashboard showing user behavior within 5 minutes of the event occurring. Currently, our dbt pipelines run hourly batch jobs.  
+
+Question:  
+How would you modify our GCP architecture to support this 5-minute latency requirement?  
 A)  
 
+When the business requires a dashboard with **under 5-minute latency**, the core shift is moving from **batch-oriented processing to event-driven streaming architecture**.
+
+### **Step 1: Recognize the Limitation**
+
+Hourly dbt pipelines are designed for batch analytics and cannot reliably meet near real-time SLAs. The solution is not to run dbt more frequently, but to introduce a **streaming ingestion layer**.
+
+---
+
+### **Step 2: Introduce a Streaming Entry Point**
+
+On GCP, I would use an event-driven design:
+
+**Event Producers → Pub/Sub → Dataflow → BigQuery**
+
+* Application events are published to Pub/Sub
+* Dataflow performs lightweight transformations
+* BigQuery receives continuously streamed data
+
+This immediately reduces latency from hours to seconds/minutes.
+
+---
+
+### **Step 3: Separate Real-Time vs Analytical Workloads**
+
+A common mistake is forcing heavy transformations into the streaming path.
+
+Instead:
+
+* **Streaming pipeline:** Minimal parsing, validation, enrichment
+* **dbt pipeline:** Business logic, aggregations, historical modeling
+
+This ensures low latency without sacrificing data quality.
+
+---
+
+### **Step 4: BigQuery Optimization for Streaming**
+
+For efficient querying:
+
+* Use partitioned tables (ingestion time or event time)
+* Cluster on common filter dimensions (user_id, event_type)
+* Handle late-arriving data safely
+
+BigQuery is well-suited for this hybrid streaming + analytics pattern.
+
+---
+
+### **Step 5: Near Real-Time Transformations**
+
+dbt remains valuable, but its role changes:
+
+* Build incremental models over streamed tables
+* Refresh derived metrics frequently
+* Power dashboards from pre-aggregated tables or materialized views
+
+---
+
+### **Step 6: Reliability & Monitoring**
+
+For real-time systems, observability is critical:
+
+* Dead-letter topics for bad messages
+* Pipeline lag monitoring
+* Data freshness checks
+
+---
+
+### **Final Outcome**
+
+This architecture enables:
+
+* Sub-5-minute data availability
+* Stable dashboard performance
+* Clear separation of streaming and analytical concerns
+
+---
+
 ## Question 23  
+In your previous project, you mentioned using GCS as a storage layer, processing CSV files with Dataflow, and loading the transformed data into BigQuery.  
+What other architectural approaches could you have used? Which design would you consider best, and why?  
 A)  
+
+The architecture choice depends on factors such as **data volume, transformation complexity, latency requirements, and cost constraints**. While **GCS → Dataflow → BigQuery** is a strong production pattern, several alternatives exist.
+
+---
+
+## **Primary Architecture Used**
+
+### **GCS → Dataflow → BigQuery**
+
+This design is ideal when:
+
+* Data volumes are large or unpredictable
+* Transformations are complex
+* Scalability and fault tolerance are important
+
+**Why this is a strong choice:**
+
+* Dataflow provides **serverless auto-scaling**
+* Efficient for **parallel processing of large files**
+* Supports **complex transformations and validations**
+* Strong **error handling & retry mechanisms**
+* Works for both **batch and streaming pipelines**
+
+This makes it well-suited for **enterprise-grade pipelines**.
+
+---
+
+## ⚡ **Alternative 1: Native BigQuery Load Jobs**
+
+### **GCS → BigQuery**
+
+Best suited when:
+
+* Files are clean and well-structured
+* Transformations are minimal or unnecessary
+* Cost efficiency is a priority
+
+**Advantages:**
+
+* No additional infrastructure required
+* Very low cost
+* High-performance ingestion
+
+**Limitations:**
+
+* Limited transformation capabilities
+* Basic validation only
+
+Often used for **raw or staging layers**.
+
+---
+
+## ⚡ **Alternative 2: BigQuery External Tables**
+
+### **GCS → BigQuery External Table**
+
+BigQuery queries data directly from GCS without loading it.
+
+**Best suited when:**
+
+* Data is queried infrequently
+* Avoiding storage duplication is important
+
+**Advantages:**
+
+* Immediate data availability
+* No data movement
+
+**Limitations:**
+
+* Slower query performance
+* Repeated scans may increase cost
+
+Useful for **exploratory or ad-hoc analytics**.
+
+---
+
+## ⚡ **Alternative 3: Cloud Functions / Cloud Run**
+
+### **GCS → Cloud Functions → BigQuery**
+
+Best suited when:
+
+* Files are small
+* Transformations are lightweight
+* Event-driven logic is required
+
+**Advantages:**
+
+* Minimal operational overhead
+* Cost-effective for low volumes
+
+**Limitations:**
+
+* Not suitable for large datasets
+* Limited parallelism
+
+Good for **micro-batch or lightweight workflows**.
+
+---
+
+## ⚡ **Alternative 4: Dataproc (Spark-Based Processing)**
+
+### **GCS → Dataproc → BigQuery**
+
+Best suited when:
+
+* Extremely large datasets
+* Spark ecosystem is required
+* Legacy Spark workloads exist
+
+**Advantages:**
+
+* Full Spark flexibility
+* Powerful for heavy compute workloads
+
+**Limitations:**
+
+* Requires cluster management
+* Higher operational complexity
+
+---
+
+## 🎯 **How to Choose the Best Architecture**
+
+My decision framework:
+
+* **Minimal transformation + lowest cost → BigQuery Load Jobs**
+* **Complex transformations + scalability → Dataflow**
+* **Rare queries + no duplication → External Tables**
+* **Small files + event-driven logic → Cloud Functions**
+* **Very large / Spark workloads → Dataproc**
+
+---
+
+## **Why Dataflow Is Often the Best Production Choice**
+
+For most real-world data engineering pipelines:
+
+* Handles **large and growing data volumes**
+* Offers **fault tolerance and reliability**
+* Supports **complex transformation logic**
+* Fully **serverless and auto-scaling**
+* Provides robust **monitoring & error handling**
+
+This balance of scalability, flexibility, and reliability makes Dataflow a common choice in **modern GCP data architectures**.
+
+---
 ## Question 24  
 A)  
 ## Question 25  
