@@ -34,7 +34,7 @@ General questions
 [16)How do you approach optimizing SQL and PySpark code for performance in large-scale distributed systems?](#question-16)  
 [17)How have you used Airflow to create and manage automated workflows? Can you describe how you handle dependencies and error recovery in Airflow DAGs?](#question-17)  
 [18)Have you used Databricks or EMR in your projects? How did you manage and optimize Spark jobs in these environments?](#question-18)  
-[19)?](#question-19)  
+[19)Design a high-level architecture to make the Snowflake customer segmentation available in BigQuery with < 30-minute latency. Explain your choice of transfer mechanism, how you would handle schema evolution, and where you would position your dbt code in this architecture. What are the cost and performance trade-offs of your approach?](#question-19)  
 [20)?](#question-20)  
 
 
@@ -656,4 +656,119 @@ These strategies help in managing and optimizing Spark jobs effectively in both 
 
 
 ## Question 19  
+Scenario:
+Our marketing team currently runs customer segmentation in Snowflake, but our product analytics team needs real-time access to this enriched customer data in BigQuery for a new personalization feature. The segmentation logic is complex, written in dbt, and runs daily.
+
+
+Design a high-level architecture to make the Snowflake customer segmentation available in BigQuery with < 30-minute latency. Explain your choice of transfer mechanism, how you would handle schema evolution, and where you would position your dbt code in this architecture. What are the cost and performance trade-offs of your approach?  
+A)  
+Architecture Overview:
+I would design a hybrid architecture that respects the existing investment in Snowflake while enabling real-time access in BigQuery. Here's my approach:
+
+Step 1: Data Extraction Strategy
+Instead of full table dumps, I would implement an incremental extraction pattern:
+
+Leverage Snowflake's Streams or Change Tracking feature to capture only records that changed since the last extraction
+Add a last_updated timestamp column if not already present
+Create a metadata table tracking the last successful extraction timestamp
+Step 2: Transfer Mechanism Options (with Trade-offs)
+
+Option A: BigQuery Federated Query (Least Complex)
+
+sql
+-- In BigQuery, create an external connection to Snowflake
+CREATE CONNECTION `project.location.snowflake_connection`
+OPTIONS (
+    type = 'CLOUD_RESOURCE',
+    endpoint_type = 'SNOWFLAKE'
+);
+
+-- Query Snowflake directly from BigQuery
+SELECT * FROM EXTERNAL_QUERY(
+    'project.location.snowflake_connection',
+    'SELECT customer_id, segment, score FROM marketing_segments WHERE updated_at > ''2024-01-01'''
+);
+Pros: Zero data movement, <5 minute latency, no infrastructure to manage
+Cons: Performance depends on network latency, Snowflake warehouse must be running, costs incurred on both platforms, not suitable for high-volume queries
+Option B: Storage Transfer Service + Parquet (Cost-Optimized)
+
+yaml
+# Architecture Flow:
+Snowflake Table -> UNLOAD to Parquet in GCS -> Storage Transfer Service -> BigQuery
+Snowflake UNLOAD Command:
+sql
+COPY INTO @external_stage_gcs/segments/
+FROM marketing_segments
+FILE_FORMAT = (TYPE = PARQUET)
+INCLUDE_QUERY_ID = TRUE
+OVERWRITE = TRUE;
+GCS Event Trigger: Cloud Function triggers upon file arrival
+BigQuery Load: Load Parquet files into a staging table with clustering on customer_id
+Pros: Cost-effective (cheap GCS storage, efficient Parquet format), good for large volumes
+Cons: 15-30 minute latency, requires orchestration, file management overhead
+Option C: Dataflow Streaming Pipeline (Real-time Focused)
+
+java
+// Pseudo-code for Dataflow pipeline
+PCollection<Row> snowflakeData = pipeline.apply(
+    "Read from Snowflake",
+    SnowflakeIO.<Row>read()
+        .withDataSourceConfiguration(...)
+        .withQuery("SELECT * FROM marketing_segments WHERE timestamp > CURRENT_TIMESTAMP() - INTERVAL '30 minutes'")
+);
+
+snowflakeData.apply(
+    "Write to BigQuery",
+    BigQueryIO.writeTableRows()
+        .to("project:dataset.segments")
+        .withWriteDisposition(WriteDisposition.WRITE_APPEND)
+        .withCreateDisposition(CreateDisposition.CREATE_IF_NEEDED)
+);
+Pros: True <5 minute latency, handles schema evolution gracefully, exactly-once semantics
+Cons: Most expensive (Dataflow costs 24/7), complex to set up and maintain
+My Recommendation:
+For <30 minute latency with existing dbt investments, I recommend Option B (Parquet + GCS) with a twist:
+
+Enhanced Architecture:
+
+Keep dbt in Snowflake for the complex segmentation (leverage existing logic and compute)
+Add a post-hook in the dbt model that exports to GCS:
+sql
+-- dbt post-hook configuration
+{{ config(
+    post_hook=[
+        "COPY INTO @gcs_stage/{{ this.name }}/ 
+         FROM {{ this }} 
+         FILE_FORMAT = (TYPE = PARQUET) 
+         OVERWRITE = TRUE"
+    ]
+) }}
+Use BigQuery's native Parquet support with partitioning by extraction date:
+sql
+CREATE OR REPLACE EXTERNAL TABLE `project.dataset.segments_external`
+OPTIONS (
+  format = 'PARQUET',
+  uris = ['gs://bucket/segments/*.parquet']
+);
+Create a materialized view in BigQuery for high-performance queries:
+sql
+CREATE MATERIALIZED VIEW `project.dataset.segments_mv` AS
+SELECT 
+  customer_id,
+  segment,
+  score,
+  LAST_VALUE(updated_at) OVER (PARTITION BY customer_id ORDER BY updated_at) as latest_segment
+FROM `project.dataset.segments_external`;
+Schema Evolution Handling:
+
+Maintain a schema registry in GCS (JSON file) that defines the expected schema
+Use schema drift detection in the Cloud Function: if new columns appear, append to staging table with NULL values
+Implement dbt sources freshness tests to alert on schema changes
+Cost vs. Performance Trade-offs:
+
+Performance: Parquet format enables predicate pushdown and column pruning in BigQuery
+Cost: Snowflake compute for UNLOAD + GCS storage (cheap) + BigQuery query costs
+Trade-off: 15-20 minute latency is the "sweet spot" - batch enough to be efficient, frequent enough for near-real-time
+
+
 ## Question 20  

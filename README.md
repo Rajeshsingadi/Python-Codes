@@ -23,3 +23,9 @@ git checkout -b develop
 staging: git add . 
  commiting:  git commit -m "Python codes" 
  pushing: git push -u origin master
+
+
+If the path is changed 
+Step 1: git remote -v
+Step 2: Which path you need to set copy paste the path from first step command to the below command in the .git url. 
+->git remote set-url origin https://github.com/Rajeshsingadi/Python-Codes.git
